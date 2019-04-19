@@ -1,4 +1,4 @@
-# ffmpeg_quality_metrics
+# FFmpeg Bitrate Stats  
 
 Simple script for calculating bitrate statistics using FFmpeg.
 
