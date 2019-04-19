@@ -87,7 +87,7 @@ Explanation of the fields:
 JSON example:
 
 ```
-➜ ./ffmpeg_bitrate_stats.py -a time -c 30 -of json ~/Downloads/bbb.mp4
+➜ ./ffmpeg_bitrate_stats.py -a time -c 30 -of json BigBuckBunny.mp4
 {
     "input_file": "BigBuckBunny.mp4",
     "stream_type": "video",
@@ -131,7 +131,7 @@ JSON example:
 CSV example:
 
 ```
-./ffmpeg_bitrate_stats.py -a time -c 30 -of csv ~/Downloads/bbb.mp4
+./ffmpeg_bitrate_stats.py -a time -c 30 -of csv BigBuckBunny.mp4        
 input_file,chunk_index,stream_type,avg_fps,num_frames,avg_bitrate,avg_bitrate_over_chunks,max_bitrate,min_bitrate,max_bitrate_factor,bitrate_per_chunk,aggregation,chunk_size,duration
 BigBuckBunny.mp4,0,video,60.002,38072,8002.859,7849.263,14565.117,3876.533,1.82,8960.89,time,30.0,634.517
 BigBuckBunny.mp4,1,video,60.002,38072,8002.859,7849.263,14565.117,3876.533,1.82,8036.678,time,30.0,634.517
