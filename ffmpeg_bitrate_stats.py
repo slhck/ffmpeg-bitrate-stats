@@ -298,7 +298,7 @@ class BitrateStats:
 
 
 def main():
-    version = "0.0.1"
+    version = "0.0.2"
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         description="ffmpeg_bitrate_stats v" + version,
