@@ -15,6 +15,8 @@ import sys
 import pandas as pd
 import numpy as np
 
+from .__init__ import __version__ as version
+
 
 def print_stderr(msg):
     print(msg, file=sys.stderr)
@@ -298,7 +300,6 @@ class BitrateStats:
 
 
 def main():
-    version = "0.0.2"
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         description="ffmpeg_bitrate_stats v" + version,

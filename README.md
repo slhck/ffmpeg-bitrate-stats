@@ -1,4 +1,4 @@
-# FFmpeg Bitrate Stats  
+# FFmpeg Bitrate Stats
 
 Simple script for calculating bitrate statistics using FFmpeg.
 
@@ -18,13 +18,15 @@ Contents:
 
 - Python 3.6
 - FFmpeg:
-    - download a static build from [their website](http://ffmpeg.org/download.html))
+    - download a static build from [their website](http://ffmpeg.org/download.html)
     - put the `ffprobe` executable in your `$PATH`
 - `pip3 install -r requirements.txt`
 
 ## Installation
 
-Clone this repo and run `ffmpeg_bitrate_stats.py`.
+    pip install ffmpeg_bitrate_stats
+
+Or clone this repository, then run the tool with `python -m ffmpeg_bitrate_stats`
 
 ## Usage
 
@@ -32,15 +34,13 @@ The script outputs a bunch of bitrate statistics, including aggregations for pre
 
 Output is to STDOUT so you can redirect that to a file or another script.
 
-See `ffmpeg_bitrate_stats.py -h`:
+See `ffmpeg_bitrate_stats -h`:
 
 ```
-usage: ffmpeg_bitrate_stats.py [-h] [-n] [-v] [-s {video,audio}]
+usage: ffmpeg_bitrate_stats [-h] [-n] [-v] [-s {video,audio}]
                                [-a {time,gop}] [-c CHUNK_SIZE]
                                [-of {json,csv}]
                                input
-
-ffmpeg_bitrate_stats v0.0.1
 
 positional arguments:
   input                 input file
@@ -87,7 +87,7 @@ Explanation of the fields:
 JSON example:
 
 ```
-➜ ./ffmpeg_bitrate_stats.py -a time -c 30 -of json BigBuckBunny.mp4
+➜ ffmpeg_bitrate_stats -a time -c 30 -of json BigBuckBunny.mp4
 {
     "input_file": "BigBuckBunny.mp4",
     "stream_type": "video",
@@ -131,7 +131,7 @@ JSON example:
 CSV example:
 
 ```
-./ffmpeg_bitrate_stats.py -a time -c 30 -of csv BigBuckBunny.mp4        
+➜  ffmpeg_bitrate_stats -a time -c 30 -of csv BigBuckBunny.mp4
 input_file,chunk_index,stream_type,avg_fps,num_frames,avg_bitrate,avg_bitrate_over_chunks,max_bitrate,min_bitrate,max_bitrate_factor,bitrate_per_chunk,aggregation,chunk_size,duration
 BigBuckBunny.mp4,0,video,60.002,38072,8002.859,7849.263,14565.117,3876.533,1.82,8960.89,time,30.0,634.517
 BigBuckBunny.mp4,1,video,60.002,38072,8002.859,7849.263,14565.117,3876.533,1.82,8036.678,time,30.0,634.517
