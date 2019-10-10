@@ -106,6 +106,8 @@ class BitrateStats:
             "ffprobe",
             "-loglevel",
             "error",
+            "-rtsp_transport", "tcp",
+            "-read_intervals", "%+"+str(self.chunk_size),
             "-select_streams",
             self.stream_type[0] + ":0",
             "-show_packets",
@@ -338,7 +340,7 @@ def main():
         "--chunk-size",
         type=float,
         default=1.0,
-        help="Custom aggregation window size in seconds",
+        help="Custom aggregation window size in seconds. Probe time in gop",
     )
 
     parser.add_argument(
