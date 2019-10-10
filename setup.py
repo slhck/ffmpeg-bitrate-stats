@@ -7,7 +7,7 @@ import os
 here = os.path.abspath(os.path.dirname(__file__))
 
 # Versioning
-with open(os.path.join(here, 'ffmpeg_bitrate_stats', '__init__.py')) as version_file:
+with open(os.path.join(here, 'stream_bitrate_stats', '__init__.py')) as version_file:
     version = eval(version_file.read().split("\n")[0].split("=")[1].strip())
 
 # Get the long description from the README file
@@ -21,7 +21,7 @@ except ImportError:
     print("pypandoc module not found, could not convert Markdown to RST")
 
 setup(
-    name='ffmpeg_bitrate_stats',
+    name='stream_bitrate_stats',
     version=version,
     description='Calculate bitrate statistics using FFmpeg',
     long_description=long_description,
@@ -38,10 +38,10 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7'
     ],
-    packages=['ffmpeg_bitrate_stats'],
+    packages=['stream_bitrate_stats'],
     entry_points={
         'console_scripts': [
-            'ffmpeg_bitrate_stats=ffmpeg_bitrate_stats.__main__:main',
+            'stream_bitrate_stats=stream_bitrate_stats.__main__:main',
         ],
     },
 )

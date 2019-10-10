@@ -1,6 +1,6 @@
-# FFmpeg Video Stream Bitrate Stats
+# Video Stream Bitrate Stats
 
-Forked version added support for:
+Forked version of `ffmpeg_bitrate_stats` with added support for:
  - rtsp/rtmp streaming 
  - probe first n seconds of stream
  - return flag if stream contains audio
@@ -9,7 +9,7 @@ Forked version added support for:
 Parse first 5 seconds of big buck rtsp stream and calculate bitrate by grouping chunks by GOP
 ```
 
- ffmpeg_bitrate_stats rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov -a gop  -c 5
+ stream_bitrate_stats rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov -a gop  -c 5
  ```
 Response:
 ```
@@ -62,9 +62,9 @@ Contents:
 
 ## Installation
 
-    pip install ffmpeg_bitrate_stats
+    pip install stream_bitrate_stats
 
-Or clone this repository, then run the tool with `python -m ffmpeg_bitrate_stats`
+Or clone this repository, then run the tool with `python -m stream_bitrate_stats`
 
 ## Usage
 
@@ -72,10 +72,10 @@ The script outputs a bunch of bitrate statistics, including aggregations for pre
 
 Output is to STDOUT so you can redirect that to a file or another script.
 
-See `ffmpeg_bitrate_stats -h`:
+See `stream_bitrate_stats -h`:
 
 ```
-usage: ffmpeg_bitrate_stats [-h] [-n] [-v] [-s {video,audio}]
+usage: stream_bitrate_stats [-h] [-n] [-v] [-s {video,audio}]
                                [-a {time,gop}] [-c CHUNK_SIZE]
                                [-of {json,csv}]
                                input
@@ -125,7 +125,7 @@ Explanation of the fields:
 JSON example:
 
 ```
-➜ ffmpeg_bitrate_stats -a time -c 30 -of json BigBuckBunny.mp4
+➜ stream_bitrate_stats -a time -c 30 -of json BigBuckBunny.mp4
 {
     "input_file": "BigBuckBunny.mp4",
     "stream_type": "video",
@@ -169,7 +169,7 @@ JSON example:
 CSV example:
 
 ```
-➜  ffmpeg_bitrate_stats -a time -c 30 -of csv BigBuckBunny.mp4
+➜  stream_bitrate_stats -a time -c 30 -of csv BigBuckBunny.mp4
 input_file,chunk_index,stream_type,avg_fps,num_frames,avg_bitrate,avg_bitrate_over_chunks,max_bitrate,min_bitrate,max_bitrate_factor,bitrate_per_chunk,aggregation,chunk_size,duration
 BigBuckBunny.mp4,0,video,60.002,38072,8002.859,7849.263,14565.117,3876.533,1.82,8960.89,time,30.0,634.517
 BigBuckBunny.mp4,1,video,60.002,38072,8002.859,7849.263,14565.117,3876.533,1.82,8036.678,time,30.0,634.517
@@ -197,7 +197,7 @@ BigBuckBunny.mp4,21,video,60.002,38072,8002.859,7849.263,14565.117,3876.533,1.82
 
 ## License
 
-ffmpeg_bitrate_stats, Copyright (c) 2019 Werner Robitza
+stream_bitrate_stats, Copyright (c) 2019 Werner Robitza
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

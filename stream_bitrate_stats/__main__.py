@@ -328,7 +328,7 @@ class BitrateStats:
 def main():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-        description="ffmpeg_bitrate_stats v" + version,
+        description="stream_bitrate_stats v" + version,
     )
     parser.add_argument("input", help="input file")
 
