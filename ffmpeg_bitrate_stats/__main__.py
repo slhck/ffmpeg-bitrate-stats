@@ -138,7 +138,7 @@ class BitrateStats:
             if "dts_time" in packet_info.keys():
                 dts = float(packet_info["dts_time"])
             else:
-                dts = "NaN"
+                dts = 0 #"NaN"
 
             if "duration_time" in packet_info.keys():
                 duration = float(packet_info["duration_time"])
