@@ -107,32 +107,40 @@ class BitrateStats:
             "-loglevel",
             "error",
             "-rtsp_transport", "tcp",
+            "-analyzeduration", str(self.chunk_size*1000000),
             "-read_intervals", "%+"+str(self.chunk_size),
-            "-select_streams",
-            self.stream_type[0] + ":0",
+            "-show_format",
             "-show_packets",
             "-show_entries",
-            "packet=pts_time,dts_time,duration_time,size,flags",
+            "packet=pts_time,dts_time,duration_time,size,flags,stream_index : stream=index,codec_type",
             "-of",
             "json",
             self.input_file,
         ]
+        if self.verbose:
+            print_stderr(f"ffprobe command: {' '.join(cmd)}")
 
         stdout, _ = run_command(cmd, self.dry_run)
         if self.dry_run:
             print_stderr("Aborting prematurely, dry-run specified")
             sys.exit(0)
 
-        info = json.loads(stdout)["packets"]
+        # stdout == { "packets": [ ... ], "streams": [..] }
+        response = json.loads(stdout)
+        av_packets = response["packets"]
+        streams_list = response["streams"]
+
+        self.contains_audio = self.__get_stream_index_by_codec_type(streams_list, "audio") != -1
+        video_packets = self.__filter_video_packets(av_packets, self.__get_stream_index_by_codec_type(streams_list, "video"))
 
         ret = []
         idx = 1
 
         default_duration = next(
-            (x["duration_time"] for x in info if "duration_time" in x.keys()), "NaN"
+            (x["duration_time"] for x in video_packets if "duration_time" in x.keys()), "NaN"
         )
 
-        for packet_info in info:
+        for packet_info in video_packets:
             frame_type = "I" if packet_info["flags"] == "K_" else "Non-I"
 
             if "dts_time" in packet_info.keys():
@@ -160,6 +168,21 @@ class BitrateStats:
         # ret = _fix_durations(ret)
         self.frames = ret
         return ret
+
+    def __filter_video_packets(self, av_packets, video_stream_ind):
+        video_packets = []
+        try:
+            video_packets = list(filter(lambda p: p["stream_index"] == video_stream_ind, av_packets))
+        except KeyError:
+            print("No video packets found in the stream")
+        return video_packets
+
+    def __get_stream_index_by_codec_type(self, streams_list, codec_type):
+        for stream in streams_list:
+            if codec_type == stream["codec_type"]:
+                return stream["index"]
+        return -1
+        # raise SystemError("No stream for given codec found found")
 
     def _calculate_duration(self):
         """
@@ -277,6 +300,7 @@ class BitrateStats:
             "aggregation": self.aggregation,
             "chunk_size": self.chunk_size,
             "duration": round(self.duration, self.rounding_factor),
+            "contains_audio": str(self.contains_audio),
         }
 
         self.bitrate_stats = ret

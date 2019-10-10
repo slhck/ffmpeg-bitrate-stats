@@ -1,4 +1,40 @@
-# FFmpeg Bitrate Stats
+# FFmpeg Video Stream Bitrate Stats
+
+Forked version added support for:
+ - rtsp/rtmp streaming 
+ - probe first n seconds of stream
+ - return flag if stream contains audio
+ 
+### Example usage
+Parse first 5 seconds of big buck rtsp stream and calculate bitrate by grouping chunks by GOP
+```
+
+ ffmpeg_bitrate_stats rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov -a gop  -c 5
+ ```
+Response:
+```
+{
+    "input_file": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
+    "stream_type": "video",
+    "avg_fps": 25.49,
+    "num_frames": 120,
+    "avg_bitrate": 76.107,
+    "avg_bitrate_over_chunks": 81.14,
+    "max_bitrate": 104.585,
+    "min_bitrate": 54.891,
+    "max_bitrate_factor": 1.374,
+    "bitrate_per_chunk": [
+        54.891,
+        83.943,
+        104.585
+    ],
+    "aggregation": "gop",
+    "chunk_size": 5.0,
+    "duration": 4.708,
+    "contains_audio": "True"
+}
+
+```
 
 [![PyPI version](https://badge.fury.io/py/ffmpeg_bitrate_stats.svg)](https://badge.fury.io/py/ffmpeg_bitrate_stats)
 
