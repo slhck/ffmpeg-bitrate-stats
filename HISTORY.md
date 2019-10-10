@@ -1,3 +1,11 @@
+Version 1.0:
+
+- rename: stream_bitrate_stats
+- feat: add audio support
+- fix: set dts to 0 if it's not present
+- feat: pass chunk size as the read interval
+- add PyPI badge
+
 Version 0.1:
 
 - make python package
