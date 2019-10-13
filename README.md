@@ -58,7 +58,6 @@ Contents:
 - FFmpeg:
     - download a static build from [their website](http://ffmpeg.org/download.html)
     - put the `ffprobe` executable in your `$PATH`
-- `pip3 install -r requirements.txt`
 
 ## Installation
 

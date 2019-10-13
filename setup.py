@@ -38,6 +38,10 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7'
     ],
+    install_requires=[
+        'numpy',
+        'pandas',
+    ],
     packages=['stream_bitrate_stats'],
     entry_points={
         'console_scripts': [
