@@ -202,34 +202,12 @@ class BitrateStats:
         if self.verbose:
             print_stderr("Collecting chunks for bitrate calculation")
 
-        # this is where we will store the stats in buckets
-        aggregation_chunks = []
-        curr_list = []
+        aggregation_types = {
+            "gop": self._get_aggregation_chunks_gop,
+            "time": self._get_aggregation_chunks_time
+        }
 
-        if self.aggregation == "gop":
-            # collect group of pictures, each one containing all frames belonging to it
-            for frame in self.frames:
-                if frame["frame_type"] != "I":
-                    curr_list.append(frame)
-                else:
-                    if curr_list:
-                        aggregation_chunks.append(curr_list)
-                    curr_list = [frame]
-            # flush the last one
-            aggregation_chunks.append(curr_list)
-        else:
-            # per-time aggregation
-            agg_time = 0
-            for frame in self.frames:
-                if agg_time < self.chunk_size:
-                    curr_list.append(frame)
-                    agg_time += frame["duration"]
-                else:
-                    if curr_list:
-                        aggregation_chunks.append(curr_list)
-                    curr_list = [frame]
-                    agg_time = frame["duration"]
-            aggregation_chunks.append(curr_list)
+        aggregation_chunks = aggregation_types .get(self.aggregation, self._get_aggregation_chunks_time())()
 
         # calculate BR per group
         self._chunks = [
@@ -237,6 +215,38 @@ class BitrateStats:
         ]
 
         return self._chunks
+
+    def _get_aggregation_chunks_time(self):
+        curr_list = []
+        aggregation_chunks = []
+        agg_time = 0
+        for frame in self.frames:
+            if agg_time < self.chunk_size:
+                curr_list.append(frame)
+                agg_time += frame["duration"]
+            else:
+                if curr_list:
+                    aggregation_chunks.append(curr_list)
+                curr_list = [frame]
+                agg_time = frame["duration"]
+        aggregation_chunks.append(curr_list)
+        return aggregation_chunks
+
+    def _get_aggregation_chunks_gop(self):
+        curr_list = []
+        aggregation_chunks = []
+        # collect group of pictures, each one containing all frames belonging to it
+        for frame in self.frames:
+            if frame["frame_type"] != "I":
+                curr_list.append(frame)
+            else:
+                if curr_list:
+                    aggregation_chunks.append(curr_list)
+                curr_list = [frame]
+        # flush the last one
+        aggregation_chunks.append(curr_list)
+
+        return aggregation_chunks
 
     @staticmethod
     def _bitrate_for_frame_list(frame_list):
