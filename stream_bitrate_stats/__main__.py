@@ -105,7 +105,6 @@ class BitrateStats:
             "ffprobe",
             "-loglevel",
             "error",
-            "-rtsp_transport", "tcp",
             "-analyzeduration", str(self.chunk_size*1000000),
             "-read_intervals", "%+"+str(self.chunk_size),
             "-show_format",
