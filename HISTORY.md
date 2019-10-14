@@ -1,3 +1,7 @@
+Version 1.0.1
+
+- remove -rtsp_transport ffprobe flag
+
 Version 1.0:
 
 - rename: stream_bitrate_stats
