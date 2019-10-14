@@ -313,6 +313,20 @@ class BitrateStats:
 
 
 def main():
+    cli_args = parse_input_data()
+    br = BitrateStats(
+        cli_args.input,
+        cli_args.stream_type,
+        cli_args.aggregation,
+        cli_args.chunk_size,
+        cli_args.dry_run,
+        cli_args.verbose,
+    )
+    br.calculate_statistics()
+    br.print_json_statistics()
+
+
+def parse_input_data():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         description="stream_bitrate_stats v" + version,
@@ -362,18 +376,7 @@ def main():
         help="output in which format",
     )
 
-    cli_args = parser.parse_args()
-
-    br = BitrateStats(
-        cli_args.input,
-        cli_args.stream_type,
-        cli_args.aggregation,
-        cli_args.chunk_size,
-        cli_args.dry_run,
-        cli_args.verbose,
-    )
-    br.calculate_statistics()
-    br.print_json_statistics()
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
