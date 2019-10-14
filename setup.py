@@ -40,7 +40,6 @@ setup(
     ],
     install_requires=[
         'numpy',
-        'pandas',
     ],
     packages=['stream_bitrate_stats'],
     entry_points={

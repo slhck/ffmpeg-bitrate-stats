@@ -12,7 +12,6 @@ import subprocess
 import math
 import json
 import sys
-import pandas as pd
 import numpy as np
 
 from .__init__ import __version__ as version
@@ -143,15 +142,9 @@ class BitrateStats:
         for packet_info in video_packets:
             frame_type = "I" if packet_info["flags"] == "K_" else "Non-I"
 
-            if "dts_time" in packet_info.keys():
-                dts = float(packet_info["dts_time"])
-            else:
-                dts = 0 #"NaN"
-
-            if "duration_time" in packet_info.keys():
-                duration = float(packet_info["duration_time"])
-            else:
-                duration = default_duration
+            dts = float(packet_info["dts_time"]) if "dts_time" in packet_info.keys() else 0
+            duration = float(packet_info["duration_time"]) if "duration_time" in packet_info.keys()\
+                else default_duration
 
             ret.append(
                 {
@@ -209,35 +202,12 @@ class BitrateStats:
         if self.verbose:
             print_stderr("Collecting chunks for bitrate calculation")
 
-        # this is where we will store the stats in buckets
-        aggregation_chunks = []
-        curr_list = []
+        aggregation_types = {
+            "gop": self._get_aggregation_chunks_gop,
+            "time": self._get_aggregation_chunks_time
+        }
 
-        if self.aggregation == "gop":
-            # collect group of pictures, each one containing all frames belonging to it
-            for frame in self.frames:
-                if frame["frame_type"] != "I":
-                    curr_list.append(frame)
-                if frame["frame_type"] == "I":
-                    if curr_list:
-                        aggregation_chunks.append(curr_list)
-                    curr_list = [frame]
-            # flush the last one
-            aggregation_chunks.append(curr_list)
-
-        else:
-            # per-time aggregation
-            agg_time = 0
-            for frame in self.frames:
-                if agg_time < self.chunk_size:
-                    curr_list.append(frame)
-                    agg_time += frame["duration"]
-                else:
-                    if curr_list:
-                        aggregation_chunks.append(curr_list)
-                    curr_list = [frame]
-                    agg_time = frame["duration"]
-            aggregation_chunks.append(curr_list)
+        aggregation_chunks = aggregation_types .get(self.aggregation, self._get_aggregation_chunks_time())()
 
         # calculate BR per group
         self._chunks = [
@@ -245,6 +215,38 @@ class BitrateStats:
         ]
 
         return self._chunks
+
+    def _get_aggregation_chunks_time(self):
+        curr_list = []
+        aggregation_chunks = []
+        agg_time = 0
+        for frame in self.frames:
+            if agg_time < self.chunk_size:
+                curr_list.append(frame)
+                agg_time += frame["duration"]
+            else:
+                if curr_list:
+                    aggregation_chunks.append(curr_list)
+                curr_list = [frame]
+                agg_time = frame["duration"]
+        aggregation_chunks.append(curr_list)
+        return aggregation_chunks
+
+    def _get_aggregation_chunks_gop(self):
+        curr_list = []
+        aggregation_chunks = []
+        # collect group of pictures, each one containing all frames belonging to it
+        for frame in self.frames:
+            if frame["frame_type"] != "I":
+                curr_list.append(frame)
+            else:
+                if curr_list:
+                    aggregation_chunks.append(curr_list)
+                curr_list = [frame]
+        # flush the last one
+        aggregation_chunks.append(curr_list)
+
+        return aggregation_chunks
 
     @staticmethod
     def _bitrate_for_frame_list(frame_list):
@@ -306,22 +308,7 @@ class BitrateStats:
         self.bitrate_stats = ret
         return self.bitrate_stats
 
-    def print_statistics(self, output_format):
-        if output_format == "csv":
-            self._print_csv()
-        elif output_format == "json":
-            self._print_json()
-
-    def _print_csv(self):
-        df = pd.DataFrame(self.bitrate_stats)
-        df.reset_index(level=0, inplace=True)
-        df.rename(index=str, columns={"index": "chunk_index"}, inplace=True)
-        cols = df.columns.tolist()
-        cols.insert(0, cols.pop(cols.index("input_file")))
-        df = df.reindex(columns=cols)
-        print(df.to_csv(index=False))
-
-    def _print_json(self):
+    def print_json_statistics(self):
         print(json.dumps(self.bitrate_stats, indent=4))
 
 
@@ -372,7 +359,6 @@ def main():
         "--output-format",
         type=str,
         default="json",
-        choices=["json", "csv"],
         help="output in which format",
     )
 
@@ -387,7 +373,7 @@ def main():
         cli_args.verbose,
     )
     br.calculate_statistics()
-    br.print_statistics(cli_args.output_format)
+    br.print_json_statistics()
 
 
 if __name__ == "__main__":
