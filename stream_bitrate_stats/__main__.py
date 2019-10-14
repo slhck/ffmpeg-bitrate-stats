@@ -207,7 +207,7 @@ class BitrateStats:
             "time": self._get_aggregation_chunks_time
         }
 
-        aggregation_chunks = aggregation_types .get(self.aggregation, self._get_aggregation_chunks_time())()
+        aggregation_chunks = aggregation_types.get(self.aggregation, self._get_aggregation_chunks_time)()
 
         # calculate BR per group
         self._chunks = [
