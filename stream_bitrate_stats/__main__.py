@@ -258,7 +258,7 @@ class BitrateStats:
         size = sum(f["size"] for f in frame_list)
         times = [f["dts"] for f in frame_list]
         sum_delta_time = sum(curr - prev for curr, prev in zip(times[1:], times))
-        bitrate = ((size * 8) / 1000) / sum_delta_time
+        bitrate = size * 8 / sum_delta_time
 
         return bitrate
 
@@ -276,7 +276,7 @@ class BitrateStats:
         """
 
         self.avg_bitrate = (
-            sum(f["size"] for f in self.frames) * 8 / 1000
+            sum(f["size"] for f in self.frames) * 8
         ) / self.duration
         self.avg_bitrate_over_chunks = np.mean(self._collect_chunks())
 
