@@ -1,3 +1,7 @@
+Version 1.0.2
+
+- cast fps float to int
+
 Version 1.0.1
 
 - remove -rtsp_transport ffprobe flag
