@@ -187,7 +187,7 @@ class BitrateStats:
         """
         FPS = number of frames divided by duration. A rough estimate.
         """
-        self.fps = len(self.frames) / self.duration
+        self.fps = int(len(self.frames) / self.duration)
         return self.fps
 
     def _collect_chunks(self):
