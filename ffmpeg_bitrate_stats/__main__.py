@@ -163,7 +163,7 @@ class BitrateStats:
         """
         Time between first and last DTS.
         """
-        self.duration = self.frames[-1]["dts"] - self.frames[0]["dts"]
+        self.duration = float(self.frames[-1]["dts"]) - float(self.frames[0]["dts"])
         return self.duration
 
     def _calculate_fps(self):
@@ -231,7 +231,7 @@ class BitrateStats:
             return math.nan
         size = sum(f["size"] for f in frame_list)
         times = [f["dts"] for f in frame_list]
-        sum_delta_time = sum(curr - prev for curr, prev in zip(times[1:], times))
+        sum_delta_time = sum(float(curr) - float(prev) for curr, prev in zip(times[1:], times))
         bitrate = ((size * 8) / 1000) / sum_delta_time
 
         return bitrate
