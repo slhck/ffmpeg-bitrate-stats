@@ -10,7 +10,15 @@
 # - `npm i -g auto-changelog`
 # - `pip3 install wheel twine`
 
+# define the file containing the version here
+VERSION_FILE="ffmpeg_bitrate_stats/__init__.py"
+
+# run checks
 command -v auto-changelog >/dev/null 2>&1 || { echo >&2 "auto-changelog is not installed. Install via npm!"; exit 1; }
+python -c "import pypandoc" || { echo >&2 "pypandoc is not installed. Install via pip!"; exit 1; }
+python -c "import twine" || { echo >&2 "twine is not installed. Install via pip!"; exit 1; }
+python -c "import wheel" || { echo >&2 "wheel is not installed. Install via pip!"; exit 1; }
+[[ -z $(git status -s) ]] || { echo >&2 "repo is not clean, commit everything first!"; exit 1; }
 
 set -e
 
@@ -23,17 +31,14 @@ PURPLE="\033[1;35m"
 CYAN="\033[1;36m"
 WHITE="\033[1;37m"
 RESET="\033[0m"
-
-LATEST_HASH=`git log --pretty=format:'%h' -n 1`
-
 QUESTION_FLAG="${GREEN}?"
 WARNING_FLAG="${YELLOW}!"
 NOTICE_FLAG="${CYAN}❯"
 
 PUSHING_MSG="${NOTICE_FLAG} Pushing new version to the ${WHITE}origin${CYAN}..."
 
-VERSION_FILE="ffmpeg_bitrate_stats/__init__.py"
-
+LATEST_HASH="$(git log --pretty=format:'%h' -n 1)"
+# get the semver version
 BASE_STRING=$(grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' "$VERSION_FILE")
 BASE_LIST=(`echo $BASE_STRING | tr '.' ' '`)
 V_MAJOR=${BASE_LIST[0]}
@@ -54,6 +59,7 @@ echo -e "${NOTICE_FLAG} Will set new version to be ${WHITE}$INPUT_STRING"
 # replace the python version
 perl -pi -e "s/\Q$BASE_STRING\E/$INPUT_STRING/" "$VERSION_FILE"
 
+# add the change itself
 git add "$VERSION_FILE"
 
 # bump initially but to not push yet
