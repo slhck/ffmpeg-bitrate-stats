@@ -206,12 +206,12 @@ class BitrateStats:
             for frame in self.frames:
                 if agg_time < self.chunk_size:
                     curr_list.append(frame)
-                    agg_time += frame["duration"]
+                    agg_time += float(frame["duration"])
                 else:
                     if curr_list:
                         aggregation_chunks.append(curr_list)
                     curr_list = [frame]
-                    agg_time = frame["duration"]
+                    agg_time = float(frame["duration"])
             aggregation_chunks.append(curr_list)
 
         # calculate BR per group
