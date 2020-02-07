@@ -133,10 +133,10 @@ class BitrateStats:
         for packet_info in info:
             frame_type = "I" if packet_info["flags"] == "K_" else "Non-I"
 
-            if "dts_time" in packet_info.keys():
-                dts = float(packet_info["dts_time"])
+            if "pts_time" in packet_info.keys():
+                pts = float(packet_info["pts_time"])
             else:
-                dts = "NaN"
+                pts = "NaN"
 
             if "duration_time" in packet_info.keys():
                 duration = float(packet_info["duration_time"])
@@ -147,23 +147,40 @@ class BitrateStats:
                 {
                     "n": idx,
                     "frame_type": frame_type,
-                    "dts": dts,
+                    "pts": pts,
                     "size": int(packet_info["size"]),
                     "duration": duration,
                 }
             )
             idx += 1
 
-        # fix for missing duration in VP9: estimate duration from DTS difference
-        # ret = _fix_durations(ret)
+        # fix for missing durations, estimate it via PTS
+        if default_duration == "NaN":
+            ret = self._fix_durations(ret)
+
         self.frames = ret
+        return ret
+
+    def _fix_durations(self, ret):
+        """
+        Calculate durations based on delta PTS
+        """
+        last_duration = None
+        for i in range(len(ret) - 1):
+            curr_pts = ret[i]["pts"]
+            next_pts = ret[i+1]["pts"]
+            if next_pts < curr_pts:
+                print_stderr("Non-monotonically increasing PTS, duration/bitrate may be invalid")
+            last_duration = next_pts - curr_pts
+            ret[i]["duration"] = last_duration
+        ret[-1]["duration"] = last_duration
         return ret
 
     def _calculate_duration(self):
         """
-        Time between first and last DTS.
+        Sum of all duration entries
         """
-        self.duration = float(self.frames[-1]["dts"]) - float(self.frames[0]["dts"])
+        self.duration = round(sum(f["duration"] for f in self.frames), 2)
         return self.duration
 
     def _calculate_fps(self):
@@ -224,13 +241,13 @@ class BitrateStats:
     @staticmethod
     def _bitrate_for_frame_list(frame_list):
         """
-        Given a list of frames with size and DTS, get the bitrate,
+        Given a list of frames with size and PTS, get the bitrate,
         which is done by dividing size through Δ time.
         """
         if len(frame_list) < 2:
             return math.nan
         size = sum(f["size"] for f in frame_list)
-        times = [f["dts"] for f in frame_list]
+        times = [f["pts"] for f in frame_list]
         sum_delta_time = sum(float(curr) - float(prev) for curr, prev in zip(times[1:], times))
         bitrate = ((size * 8) / 1000) / sum_delta_time
 
