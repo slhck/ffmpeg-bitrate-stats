@@ -26,7 +26,7 @@ Contents:
 
 ## Installation
 
-    pip install ffmpeg_bitrate_stats
+    pip3 install ffmpeg_bitrate_stats
 
 Or clone this repository, then run the tool with `python -m ffmpeg_bitrate_stats`
 
