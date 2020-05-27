@@ -275,6 +275,10 @@ class BitrateStats:
         size = sum(f["size"] for f in frame_list)
         times = [f["pts"] for f in frame_list]
         sum_delta_time = sum(float(curr) - float(prev) for curr, prev in zip(times[1:], times))
+
+        if sum_delta_time > 0:
+            sum_delta_time = 1
+
         bitrate = size * 8 / sum_delta_time
 
         return bitrate
