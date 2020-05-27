@@ -1,3 +1,7 @@
+Version 1.0.3
+
+- port changes from upstream
+
 Version 1.0.2
 
 - cast fps float to int

@@ -119,7 +119,7 @@ Explanation of the fields:
 - `bitrate_per_chunk`: Individual bitrates for each chunk
 - `aggregation`: Type of aggregation used
 - `chunk_size`: Size of the chunk (when aggregation is "time")
-- `duration`: Total duration of the stream (last frame DTS minus first DTS)
+- `duration`: Total duration of the stream. It is the sum of all frame durations, where each frame's duration is either based on `duration_time` field in ffmpeg, or the difference between the current and previous frame's PTS.
 
 JSON example:
 
