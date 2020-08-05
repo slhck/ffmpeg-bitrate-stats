@@ -143,14 +143,20 @@ class BitrateStats:
 
             pts = float(packet_info["pts_time"]) if "pts_time" in packet_info.keys() else "NaN"
             duration = float(packet_info["duration_time"]) if "duration_time" in packet_info.keys()\
-                else default_duration
+                else float(default_duration)
+
+            try:
+                p_size = int(packet_info["size"])
+            except (TypeError, ValueError, KeyError):
+                print_stderr("Malformed packet_info['size'], defaulting to '0'")
+                p_size = 0
 
             ret.append(
                 {
                     "n": idx,
                     "frame_type": frame_type,
                     "pts": pts,
-                    "size": int(packet_info["size"]),
+                    "size": p_size,
                     "duration": duration,
                 }
             )
@@ -197,7 +203,7 @@ class BitrateStats:
         """
         Sum of all duration entries
         """
-        self.duration = round(sum(float(f["duration"]) for f in self.frames), 2)
+        self.duration = round(sum(f["duration"] for f in self.frames), 2)
         return self.duration
 
     def _calculate_fps(self):
