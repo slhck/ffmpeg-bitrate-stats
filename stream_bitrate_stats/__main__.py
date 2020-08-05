@@ -197,7 +197,7 @@ class BitrateStats:
         """
         Sum of all duration entries
         """
-        self.duration = round(sum(f["duration"] for f in self.frames), 2)
+        self.duration = round(sum(float(f["duration"]) for f in self.frames), 2)
         return self.duration
 
     def _calculate_fps(self):
