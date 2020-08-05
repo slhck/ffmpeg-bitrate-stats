@@ -141,9 +141,18 @@ class BitrateStats:
         for packet_info in video_packets:
             frame_type = "I" if packet_info["flags"] == "K_" else "Non-I"
 
-            pts = float(packet_info["pts_time"]) if "pts_time" in packet_info.keys() else "NaN"
-            duration = float(packet_info["duration_time"]) if "duration_time" in packet_info.keys()\
-                else float(default_duration)
+            try:
+                pts = float(packet_info["pts_time"]) if "pts_time" in packet_info.keys() else "NaN"
+            except (TypeError, ValueError, KeyError):
+                print_stderr(f"Malformed packet_info['pts_time'], defaulting to NaN")
+                pts = "NaN"
+
+            try:
+                duration = float(packet_info["duration_time"]) if "duration_time" in packet_info.keys()\
+                    else float(default_duration)
+            except (TypeError, ValueError, KeyError):
+                print_stderr(f"Malformed packet_info['duration_time'], defaulting to '{default_duration}'")
+                duration = float(default_duration)
 
             try:
                 p_size = int(packet_info["size"])
