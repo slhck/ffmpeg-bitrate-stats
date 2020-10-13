@@ -1,8 +1,10 @@
+#!/usr/bin/env pytest
+
 import os
 import sys
 import json
 
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from ffmpeg_bitrate_stats import __main__ as main
 from ffmpeg_bitrate_stats.__main__ import run_command
