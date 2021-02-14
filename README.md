@@ -1,6 +1,6 @@
 # FFmpeg Bitrate Stats
 
-[![PyPI version](https://badge.fury.io/py/ffmpeg_bitrate_stats.svg)](https://badge.fury.io/py/ffmpeg_bitrate_stats)
+[![PyPI version](https://img.shields.io/pypi/v/ffmpeg_bitrate_stats.svg)](https://img.shields.io/pypi/v/ffmpeg_bitrate_stats)
 
 Simple script for calculating bitrate statistics using FFmpeg.
 
