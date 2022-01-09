@@ -4,6 +4,11 @@ Changelog
 
 (unreleased)
 ------------
+- Bump version to 0.2.3. [Werner Robitza]
+- Remove delta-PTS calculation, replace with duration. [Werner Robitza]
+
+  this makes everything conceptually easier
+- Update badge link. [Werner Robitza]
 - Bump version to 0.2.2. [Werner Robitza]
 - Improve setup.py. [Werner Robitza]
 - Remove release script. [Werner Robitza]
