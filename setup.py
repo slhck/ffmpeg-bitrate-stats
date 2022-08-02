@@ -36,7 +36,7 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
     ],
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     packages=["ffmpeg_bitrate_stats"],
     entry_points={
         "console_scripts": [
