@@ -4,6 +4,9 @@ Changelog
 
 (unreleased)
 ------------
+- Bump version to 0.3.0. [Werner Robitza]
+- Add another console entry point. [Werner Robitza]
+- Update python requirements. [Werner Robitza]
 - Bump version to 0.2.3. [Werner Robitza]
 - Remove delta-PTS calculation, replace with duration. [Werner Robitza]
 
