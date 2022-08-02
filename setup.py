@@ -41,6 +41,7 @@ setup(
     entry_points={
         "console_scripts": [
             "ffmpeg_bitrate_stats=ffmpeg_bitrate_stats.__main__:main",
+            "ffmpeg-bitrate-stats=ffmpeg_bitrate_stats.__main__:main",
         ],
     },
 )
