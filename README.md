@@ -18,7 +18,7 @@ Contents:
 
 ## Requirements
 
-- Python 3.7 or higher
+- Python 3.8 or higher
 - FFmpeg:
     - download a static build from [their website](http://ffmpeg.org/download.html)
     - put the `ffprobe` executable in your `$PATH`

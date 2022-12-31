@@ -1,15 +1,19 @@
 # Always prefer setuptools over distutils
-from setuptools import setup
+import os
 
 # To use a consistent encoding
 from codecs import open
-import os
+
+from setuptools import setup
 
 here = os.path.abspath(os.path.dirname(__file__))
 
 # Versioning
 with open(os.path.join(here, "ffmpeg_bitrate_stats", "__init__.py")) as version_file:
-    version = eval(version_file.read().split("\n")[0].split("=")[1].strip())
+    for line in version_file:
+        if line.startswith("__version__"):
+            version = line.split(" = ")[1]
+            break
 
 # Get the long description from the README file
 with open(os.path.join(here, "README.md"), encoding="utf-8") as f:
@@ -35,6 +39,7 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
     ],
     python_requires=">=3.7",
     packages=["ffmpeg_bitrate_stats"],

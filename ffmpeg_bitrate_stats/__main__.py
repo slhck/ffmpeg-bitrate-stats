@@ -8,12 +8,13 @@
 # License: MIT
 
 import argparse
-import subprocess
-import math
 import json
+import math
+import subprocess
 import sys
-import pandas as pd
+
 import numpy as np
+import pandas as pd
 
 from .__init__ import __version__ as version
 
@@ -168,9 +169,11 @@ class BitrateStats:
         last_duration = None
         for i in range(len(ret) - 1):
             curr_pts = ret[i]["pts"]
-            next_pts = ret[i+1]["pts"]
+            next_pts = ret[i + 1]["pts"]
             if next_pts < curr_pts:
-                print_stderr("Non-monotonically increasing PTS, duration/bitrate may be invalid")
+                print_stderr(
+                    "Non-monotonically increasing PTS, duration/bitrate may be invalid"
+                )
             last_duration = next_pts - curr_pts
             ret[i]["duration"] = last_duration
         ret[-1]["duration"] = last_duration
