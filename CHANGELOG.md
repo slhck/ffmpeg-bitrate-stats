@@ -4,6 +4,9 @@ Changelog
 
 (unreleased)
 ------------
+- Bump version to 0.4.0. [Werner Robitza]
+- Add API, types and docs. [Werner Robitza]
+- Bump python version, cleanup. [Werner Robitza]
 - Bump version to 0.3.1. [Werner Robitza]
 - Update python requirements. [Werner Robitza]
 - Bump version to 0.3.0. [Werner Robitza]
