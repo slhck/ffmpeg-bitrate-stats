@@ -1,13 +1,12 @@
 #!/usr/bin/env pytest
 
+import json
 import os
 import sys
-import json
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from ffmpeg_bitrate_stats import __main__ as main
-from ffmpeg_bitrate_stats.__main__ import run_command
+from ffmpeg_bitrate_stats import run_command  # noqa: E402
 
 test_files = {
     "test.mp4": {
@@ -55,6 +54,9 @@ class TestBitrates:
             stdout, _ = run_command(
                 ["python3", "-m", "ffmpeg_bitrate_stats", test_file]
             )
+
+            assert stdout is not None
+
             output = json.loads(stdout)
 
             assert test_filename in output["input_file"]

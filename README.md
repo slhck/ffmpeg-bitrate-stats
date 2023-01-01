@@ -12,6 +12,7 @@ Contents:
 - [Installation](#installation)
 - [Usage](#usage)
 - [Output](#output)
+- [API](#api)
 - [License](#license)
 
 ------
@@ -163,6 +164,20 @@ BigBuckBunny.mp4,19,video,60.002,38072,8002.859,7849.263,14565.117,3876.533,1.82
 BigBuckBunny.mp4,20,video,60.002,38072,8002.859,7849.263,14565.117,3876.533,1.82,3876.533,time,30.0,634.517
 BigBuckBunny.mp4,21,video,60.002,38072,8002.859,7849.263,14565.117,3876.533,1.82,3914.455,time,30.0,634.517
 ```
+
+## API
+
+The program exposes an API that you can use yourself:
+
+```python
+from ffmpeg_bitrate_stats import FfmpegBitrateStats
+
+ffbs = FfmpegBitrateStats("path/to/ref")
+ffbs.calculate_statistics()
+ffbs.print_statistics()
+```
+
+For more usage please read [the docs](https://htmlpreview.github.io/?https://github.com/slhck/ffmpeg-bitrate-stats/blob/master/docs/ffmpeg_bitrate_stats.html).
 
 ## License
 

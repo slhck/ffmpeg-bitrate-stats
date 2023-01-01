@@ -35,17 +35,19 @@ setup(
         "Topic :: Multimedia :: Video",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
     ],
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     packages=["ffmpeg_bitrate_stats"],
+    include_package_data=True,
+    package_data={
+        "ffmpeg_bitrate_stats": ["py.typed"],
+    },
     entry_points={
         "console_scripts": [
-            "ffmpeg_bitrate_stats=ffmpeg_bitrate_stats.__main__:main",
             "ffmpeg-bitrate-stats=ffmpeg_bitrate_stats.__main__:main",
         ],
     },
