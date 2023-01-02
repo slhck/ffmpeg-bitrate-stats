@@ -6,6 +6,8 @@ Simple script for calculating bitrate statistics using FFmpeg.
 
 Author: Werner Robitza <werner.robitza@gmail.com>
 
+**Note:** Previous versions installed a `ffmpeg_bitrate_stats` executable. To harmonize it with other tools, now the executable is called `ffmpeg-bitrate-stats`. Please ensure you remove the old executable (e.g. run `which ffmpeg_bitrate_stats` and remove the file).
+
 Contents:
 
 - [Requirements](#requirements)
