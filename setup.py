@@ -12,7 +12,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, "ffmpeg_bitrate_stats", "__init__.py")) as version_file:
     for line in version_file:
         if line.startswith("__version__"):
-            version = line.split(" = ")[1]
+            version = eval(line.split(" = ")[1])
             break
 
 # Get the long description from the README file
