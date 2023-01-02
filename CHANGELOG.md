@@ -1,54 +1,121 @@
-Changelog
-=========
+# Changelog
 
 
-(unreleased)
-------------
-- Bump version to 0.4.0. [Werner Robitza]
-- Add API, types and docs. [Werner Robitza]
-- Bump python version, cleanup. [Werner Robitza]
-- Bump version to 0.3.1. [Werner Robitza]
-- Update python requirements. [Werner Robitza]
-- Bump version to 0.3.0. [Werner Robitza]
-- Add another console entry point. [Werner Robitza]
-- Update python requirements. [Werner Robitza]
-- Bump version to 0.2.3. [Werner Robitza]
-- Remove delta-PTS calculation, replace with duration. [Werner Robitza]
+## (unreleased)
+
+* Fix setup script.
+
+* Update README.
+
+* Add github workflows.
+
+* Add note on old executable in readme.
+
+
+## v0.4.0 (2023-01-01)
+
+* Add API, types and docs.
+
+* Bump python version, cleanup.
+
+
+## v0.3.1 (2022-08-02)
+
+* Update python requirements.
+
+
+## v0.3.0 (2022-08-02)
+
+* Add another console entry point.
+
+* Update python requirements.
+
+
+## v0.2.3 (2022-01-09)
+
+* Remove delta-PTS calculation, replace with duration.
 
   this makes everything conceptually easier
-- Update badge link. [Werner Robitza]
-- Bump version to 0.2.2. [Werner Robitza]
-- Improve setup.py. [Werner Robitza]
-- Remove release script. [Werner Robitza]
-- Fix syntax error. [Werner Robitza]
-- Format setup.py and switch to markdown. [Werner Robitza]
-- Update badge URL. [Werner Robitza]
-- Remove obsolete file. [Werner Robitza]
-- Make test executable. [Werner Robitza]
-- Bump version to 0.2.1. [Werner Robitza]
-- Fix unit tests after program logic modification, fixes #7. [Werner
-  Robitza]
-- Change pip to pip3. [Werner Robitza]
-- Fix description of duration calculation. [Werner Robitza]
-- Bump version to 0.2.0. [Werner Robitza]
-- Add py3.8 compat. [Werner Robitza]
-- Add proper handling of PTS and duration/fps calculation. [Werner
-  Robitza]
-- Update release script. [Werner Robitza]
-- Bump version to 0.1.3. [Werner Robitza]
-- Fix casting problem, fixes #3. [Werner Robitza]
-- Bump version to 0.1.2. [Werner Robitza]
-- Rename changelog. [Werner Robitza]
-- Update release script. [Werner Robitza]
-- Version bump to 0.1.1. [Werner Robitza]
-- Add simple test suite. [Werner Robitza]
-- Convert into float, fixes #3. [Werner Robitza]
-- Add PyPI badge. [Werner Robitza]
-- Version bump to 0.1. [Werner Robitza]
-- Make python package. [Werner Robitza]
-- Fix examples in readme. [Werner Robitza]
-- Update README.md. [Werner Robitza]
-- Version bump to 0.0.2. [Werner Robitza]
-- Initial commit. [Werner Robitza]
+
+* Update badge link.
+
+
+## v0.2.2 (2021-03-10)
+
+* Improve setup.py.
+
+* Remove release script.
+
+* Fix syntax error.
+
+* Format setup.py and switch to markdown.
+
+* Update badge URL.
+
+* Remove obsolete file.
+
+* Make test executable.
+
+
+## v0.2.1 (2020-05-27)
+
+* Fix unit tests after program logic modification, fixes #7.
+
+* Change pip to pip3.
+
+* Fix description of duration calculation.
+
+
+## v0.2.0 (2020-02-07)
+
+* Add py3.8 compat.
+
+* Add proper handling of PTS and duration/fps calculation.
+
+* Update release script.
+
+
+## v0.1.3 (2020-01-16)
+
+* Fix casting problem, fixes #3.
+
+
+## v0.1.2 (2020-01-14)
+
+* Rename changelog.
+
+* Update release script.
+
+
+## v0.1.1 (2020-01-14)
+
+* Version bump to 0.1.1.
+
+* Add simple test suite.
+
+* Convert into float, fixes #3.
+
+* Add PyPI badge.
+
+
+## v0.1 (2019-05-25)
+
+* Version bump to 0.1.
+
+* Make python package.
+
+* Fix examples in readme.
+
+* Update README.md.
+
+
+## v0.0.2 (2019-04-19)
+
+* Version bump to 0.0.2.
+
+
+## v0.0.1 (2019-04-19)
+
+* Initial commit.
 
 
