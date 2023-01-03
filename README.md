@@ -2,7 +2,7 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/ffmpeg_bitrate_stats.svg)](https://pypi.org/project/ffmpeg_bitrate_stats)
 
-[![Python package](https://github.com/slhck/ffmpeg-normalize/actions/workflows/python-package.yml/badge.svg)](https://github.com/slhck/ffmpeg-bitrate-stats/actions/workflows/python-package.yml)
+[![Python package](https://github.com/slhck/ffmpeg-bitrate-stats/actions/workflows/python-package.yml/badge.svg)](https://github.com/slhck/ffmpeg-bitrate-stats/actions/workflows/python-package.yml)
 
 Simple script for calculating bitrate statistics using FFmpeg.
 
