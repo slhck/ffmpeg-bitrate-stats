@@ -36,7 +36,7 @@ jobs:
         flake8 . --count --exit-zero --max-line-length=127 --ignore=W503,W504,C901
     - name: Type check with mypy
       run: |
-        mypy --no-namespace-packages --ignore-missing-imports ffmpeg_bitrate_stats
+        mypy ffmpeg_bitrate_stats
     - name: Test with pytest
       run: |
         pytest test/test.py

@@ -5,7 +5,7 @@ import logging
 import math
 import subprocess
 import sys
-from typing import Literal, TypedDict, cast
+from typing import List, Literal, TypedDict, cast
 
 import numpy as np
 import pandas as pd
@@ -14,7 +14,7 @@ logger = logging.getLogger("ffmpeg-bitrate-stats")
 
 
 def run_command(
-    cmd, dry_run=False, verbose=False
+    cmd: List[str], dry_run: bool = False, verbose: bool = False
 ) -> tuple[str, str] | tuple[None, None]:
     """
     Run a command directly
@@ -248,7 +248,7 @@ class BitrateStats:
         self.frames = ret
         return ret
 
-    def _fix_durations(self, ret):
+    def _fix_durations(self, ret: List[FrameEntry]) -> List[FrameEntry]:
         """
         Calculate durations based on delta PTS.
         """
@@ -256,13 +256,17 @@ class BitrateStats:
         for i in range(len(ret) - 1):
             curr_pts = ret[i]["pts"]
             next_pts = ret[i + 1]["pts"]
+            if curr_pts == "NaN" or next_pts == "NaN":
+                logger.warning("PTS is NaN, duration/bitrate may be invalid")
+                continue
             if next_pts < curr_pts:
                 logger.warning(
                     "Non-monotonically increasing PTS, duration/bitrate may be invalid"
                 )
             last_duration = next_pts - curr_pts
             ret[i]["duration"] = last_duration
-        ret[-1]["duration"] = last_duration
+        if last_duration is not None:
+            ret[-1]["duration"] = last_duration
         return ret
 
     def _calculate_duration(self) -> float:
@@ -444,7 +448,7 @@ class BitrateStats:
         cols = df.columns.tolist()
         cols.insert(0, cols.pop(cols.index("input_file")))
         df = df.reindex(columns=cols)
-        return df.to_csv(index=False)
+        return cast(str, df.to_csv(index=False))
 
     def get_json(self) -> str:
         """

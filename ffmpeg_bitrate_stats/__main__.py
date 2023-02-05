@@ -32,7 +32,7 @@ def setup_logger(level: int = logging.INFO) -> logging.Logger:
     return logger
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         description="ffmpeg_bitrate_stats v" + version,

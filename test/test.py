@@ -41,7 +41,7 @@ test_files = {
 
 
 class TestBitrates:
-    def test_output(self):
+    def test_output(self) -> None:
         """
         Simple test for CLI functionality
         """
