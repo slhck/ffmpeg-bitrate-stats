@@ -174,9 +174,9 @@ BigBuckBunny.mp4,21,video,60.002,38072,8002.859,7849.263,14565.117,3876.533,1.82
 The program exposes an API that you can use yourself:
 
 ```python
-from ffmpeg_bitrate_stats import FfmpegBitrateStats
+from ffmpeg_bitrate_stats import BitrateStats
 
-ffbs = FfmpegBitrateStats("path/to/ref")
+ffbs = BitrateStats("path/to/ref")
 ffbs.calculate_statistics()
 ffbs.print_statistics()
 ```
@@ -185,7 +185,7 @@ For more usage please read [the docs](https://htmlpreview.github.io/?https://git
 
 ## License
 
-ffmpeg_bitrate_stats, Copyright (c) 2019-2022 Werner Robitza
+ffmpeg_bitrate_stats, Copyright (c) 2019-2023 Werner Robitza
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
