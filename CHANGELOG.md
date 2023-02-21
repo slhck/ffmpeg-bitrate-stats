@@ -1,7 +1,27 @@
 # Changelog
 
 
-## (unreleased)
+## v0.4.1 (2023-02-21)
+
+* Fix readme and add license file.
+
+* Add flake8 to tox, update GH actions.
+
+* Fix tox invocation.
+
+* Fix apt in CI.
+
+* Add tox and fix types.
+
+* Update gitignore.
+
+* Add mypy settings.
+
+* Remove stalebot.
+
+* Fix readme badge.
+
+* Fix changelog.
 
 * Fix setup script.
 
