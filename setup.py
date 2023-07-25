@@ -42,6 +42,7 @@ setup(
     ],
     python_requires=">=3.8",
     packages=["ffmpeg_bitrate_stats"],
+    install_requires=["numpy", "pandas", "plotille"],
     include_package_data=True,
     package_data={
         "ffmpeg_bitrate_stats": ["py.typed"],

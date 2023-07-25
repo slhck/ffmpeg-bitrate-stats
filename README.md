@@ -16,6 +16,7 @@ Contents:
 - [Installation](#installation)
 - [Usage](#usage)
 - [Output](#output)
+- [Plotting](#plotting)
 - [API](#api)
 - [License](#license)
 
@@ -45,15 +46,17 @@ Output is to STDOUT so you can redirect that to a file or another script.
 See `ffmpeg-bitrate-stats -h`:
 
 ```
-usage: ffmpeg-bitrate-stats [-h] [-n] [-v] [-s {video,audio}]
-                               [-a {time,gop}] [-c CHUNK_SIZE]
-                               [-of {json,csv}]
-                               input
+usage: __main__.py [-h] [-n] [-v] [-s {video,audio}] [-a {time,gop}]
+                   [-c CHUNK_SIZE] [-of {json,csv}] [-p] [-pw PLOT_WIDTH]
+                   [-ph PLOT_HEIGHT]
+                   input
+
+ffmpeg_bitrate_stats v0.4.3
 
 positional arguments:
   input                 input file
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   -n, --dry-run         Do not run command, just show what would be done
                         (default: False)
@@ -68,6 +71,12 @@ optional arguments:
                         1.0)
   -of {json,csv}, --output-format {json,csv}
                         output in which format (default: json)
+  -p, --plot            Plot the bitrate over time (to STDERR) (default:
+                        False)
+  -pw PLOT_WIDTH, --plot-width PLOT_WIDTH
+                        Plot width (default: 70)
+  -ph PLOT_HEIGHT, --plot-height PLOT_HEIGHT
+                        Plot height (default: 18)
 ```
 
 ## Output
@@ -167,6 +176,37 @@ BigBuckBunny.mp4,18,video,60.002,38072,8002.859,7849.263,14565.117,3876.533,1.82
 BigBuckBunny.mp4,19,video,60.002,38072,8002.859,7849.263,14565.117,3876.533,1.82,12524.024,time,30.0,634.517
 BigBuckBunny.mp4,20,video,60.002,38072,8002.859,7849.263,14565.117,3876.533,1.82,3876.533,time,30.0,634.517
 BigBuckBunny.mp4,21,video,60.002,38072,8002.859,7849.263,14565.117,3876.533,1.82,3914.455,time,30.0,634.517
+```
+
+## Plotting
+
+To enable plots, pass the `-p` or `--plot` flag. This will plot the bitrate over time to STDERR. You can redirect this to a file, or pipe it to another program. Or you can disable STDOUT output with `>/dev/null` to only see the plot:
+
+```bash
+ffmpeg-bitrate-stats -a time -c 30 -p BigBuckBunny.mp4 >/dev/null
+```
+
+This might output a plot like this:
+
+```console
+  7474.000 |
+  6975.733 | ⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡎⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+  6477.467 | ⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⠁⢱⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+  5979.200 | ⡇⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡎⠀⠈⡆⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+  5480.933 | ⡧⡀⠀⠀⢰⢱⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⠁⠀⠀⠱⠊⠱⡀⠀⠀⠀⠀⢀⠤⡀⠀⠀⠀⠀⠀⠀⢀⡄⠀⠀⢠⠊⠈⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+  4982.667 | ⡇⠈⢆⠀⡜⠀⢣⠀⠀⠀⠀⠀⠀⡠⠒⠙⡄⠀⠀⡀⠀⠀⢀⡀⠀⢠⢢⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡎⠀⠀⠀⠀⠀⠀⢣⠀⢀⣀⠤⠊⠀⠈⠑⠢⢄⠀⠀⢠⠊⠘⡄⡰⠁⠀⠀⠈⢢⠀⠀⠀⣀⠤⠤⡀⠀⠀⠀⠀
+  4484.400 | ⡇⠀⠈⢶⠁⠀⠈⠦⣀⠀⠀⠀⡔⠁⠀⠀⠱⡀⢰⠙⡄⢀⠎⠈⠒⠁⠀⠱⡀⠀⠀⠀⢠⠓⡄⢀⠤⡀⢰⠁⠀⠀⠀⠀⠀⠀⠀⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠁⠀⠀⠘⠁⠀⠀⠀⠀⠀⠑⠒⠊⠀⠀⠀⠈⠢⠤⡄⠀
+  3986.133 | ⡇⠀⠀⠀⠀⠀⠀⠀⠈⢢⠀⡸⠀⠀⠀⠀⠀⢣⠃⠀⠘⠎⠀⠀⠀⠀⠀⠀⠈⢆⡀⠀⡎⠀⠈⠁⠀⠱⡎⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢱⠀
+  3487.867 | ⡇⠀⠀⠀⠀⠀⠀⠀⠀⠈⢢⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠚⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⡄
+  2989.600 | ⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇
+  2491.333 | ⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸
+  1993.067 | ⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈
+  1494.800 | ⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   996.533 | ⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+   498.267 | ⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+     0.000 | ⣇⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀
+-----------|-|---------|---------|---------|---------|---------|---------|---------|---------|-> (Time (s))
+           | 0.000     5.760     11.520    17.280    23.040    28.800    34.560    40.320    46.080
 ```
 
 ## API

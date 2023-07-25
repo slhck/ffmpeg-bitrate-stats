@@ -5,10 +5,11 @@ import logging
 import math
 import subprocess
 import sys
-from typing import List, Literal, TypedDict, cast
+from typing import Any, List, Literal, TypedDict, cast
 
 import numpy as np
 import pandas as pd
+import plotille
 
 logger = logging.getLogger("ffmpeg-bitrate-stats")
 
@@ -471,3 +472,43 @@ class BitrateStats:
             raise RuntimeError("No bitrate stats available")
 
         return json.dumps(self.bitrate_stats, indent=4)
+
+    def plot(self, width: int = 80, height: int = 30) -> None:
+        """
+        Plot the bitrate over time to STDERR.
+
+        Args:
+            width (int, optional): Width of the plot. Defaults to 80.
+            height (int, optional): Height of the plot. Defaults to 30.
+        """
+        chunks = self._collect_chunks()
+
+        if self.aggregation == "gop":
+            x_values = [i for i in range(len(chunks))]
+        else:
+            # x values are time-based
+            x_values = [i * self.chunk_size for i in range(len(chunks))]
+        y_values = chunks
+
+        def _num_formatter(
+            val: Any, chars: int, delta: float, left: bool = False
+        ) -> str:
+            align = "<" if left else ""
+            return f"{val:{align}{chars}.{self.rounding_factor}f}"
+
+        fig = plotille.Figure()
+        fig.width = width
+        fig.height = height
+        fig.set_x_limits(min_=0, max_=self.duration)
+        fig.set_y_limits(min_=0, max_=math.ceil(max(y_values)))
+        fig.register_label_formatter(float, _num_formatter)
+        fig.register_label_formatter(int, _num_formatter)
+        fig.x_label = "Time (s)"
+        fig.y_label = "Bitrate (kbit/s)"
+
+        fig.plot(
+            x_values,
+            y_values,
+        )
+
+        print(fig.show(), file=sys.stderr)
