@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v0.4.2 (2023-07-25)
+
+* Fix frame order for bitrate calculation.
+
+  ... in case PTS are unordered, bitrate may be negative for small chunk sizes
+
+
 ## v0.4.1 (2023-02-21)
 
 * Fix readme and add license file.
