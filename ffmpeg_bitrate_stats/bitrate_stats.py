@@ -483,32 +483,40 @@ class BitrateStats:
         """
         chunks = self._collect_chunks()
 
-        if self.aggregation == "gop":
-            x_values = [i for i in range(len(chunks))]
-        else:
-            # x values are time-based
-            x_values = [i * self.chunk_size for i in range(len(chunks))]
-        y_values = chunks
+        fig = plotille.Figure()
+        fig.width = width
+        fig.height = height
 
-        def _num_formatter(
+        def _round_decimals(
             val: Any, chars: int, delta: float, left: bool = False
         ) -> str:
             align = "<" if left else ""
             return f"{val:{align}{chars}.{self.rounding_factor}f}"
 
-        fig = plotille.Figure()
-        fig.width = width
-        fig.height = height
-        fig.set_x_limits(min_=0, max_=self.duration)
-        fig.set_y_limits(min_=0, max_=math.ceil(max(y_values)))
-        fig.register_label_formatter(float, _num_formatter)
-        fig.register_label_formatter(int, _num_formatter)
-        fig.x_label = "Time (s)"
+        # def _float_to_int(
+        #     val: Any, chars: int, delta: float, left: bool = False
+        # ) -> str:
+        #     align = "<" if left else ""
+        #     return f"{int(val):{align}{chars}}"
+
+        if self.aggregation == "gop":
+            x_values = [i for i in range(len(chunks))]
+            fig.set_x_limits(min_=0, max_=len(chunks))
+            fig.x_label = "GOP"
+        else:
+            # x values are time-based
+            x_values = [i * self.chunk_size for i in range(len(chunks))]
+            fig.set_x_limits(min_=0, max_=self.duration)
+            fig.x_label = "Time (s)"
+
+        fig.register_label_formatter(int, _round_decimals)
+        fig.register_label_formatter(float, _round_decimals)
+        fig.set_y_limits(min_=0)
         fig.y_label = "Bitrate (kbit/s)"
 
         fig.plot(
             x_values,
-            y_values,
+            chunks,
         )
 
         print(fig.show(), file=sys.stderr)
