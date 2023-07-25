@@ -93,7 +93,7 @@ class BitrateStatsSummary(TypedDict):
     """
     The aggregation type (time/chunks).
     """
-    chunk_size: int
+    chunk_size: Optional[int]
     """
     The chunk size in seconds.
     """
@@ -417,7 +417,7 @@ class BitrateStats:
                 round(b, self.rounding_factor) for b in self._collect_chunks()
             ],
             "aggregation": self.aggregation,
-            "chunk_size": self.chunk_size,
+            "chunk_size": self.chunk_size if self.aggregation == "time" else None,
             "duration": round(self.duration, self.rounding_factor),
         }
 
