@@ -1,6 +1,11 @@
 # Changelog
 
 
+## v1.0.0 (2023-07-25)
+
+* Allow plotting results.
+
+
 ## v0.4.3 (2023-07-25)
 
 * Fix bug with keyframe detection.
