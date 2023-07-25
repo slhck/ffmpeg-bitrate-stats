@@ -5,7 +5,7 @@ import logging
 import math
 import subprocess
 import sys
-from typing import Any, List, Literal, TypedDict, cast
+from typing import Any, List, Literal, Optional, TypedDict, cast
 
 import numpy as np
 import pandas as pd
@@ -151,6 +151,7 @@ class BitrateStats:
 
         self.rounding_factor: int = 3
 
+        self._gop_start_times: Optional[list[float]] = None
         self._chunks: list[float] = []
 
     def calculate_statistics(self) -> BitrateStatsSummary:
@@ -312,6 +313,8 @@ class BitrateStats:
         aggregation_chunks: list[list[FrameEntry]] = []
         curr_list: list[FrameEntry] = []
 
+        self._gop_start_times = []
+
         if self.aggregation == "gop":
             # collect group of pictures, each one containing all frames belonging to it
             for frame in self.frames:
@@ -321,6 +324,7 @@ class BitrateStats:
                     if curr_list:
                         aggregation_chunks.append(curr_list)
                     curr_list = [frame]
+                    self._gop_start_times.append(float(frame["pts"]))
             # flush the last one
             aggregation_chunks.append(curr_list)
 
@@ -493,25 +497,17 @@ class BitrateStats:
             align = "<" if left else ""
             return f"{val:{align}{chars}.{self.rounding_factor}f}"
 
-        # def _float_to_int(
-        #     val: Any, chars: int, delta: float, left: bool = False
-        # ) -> str:
-        #     align = "<" if left else ""
-        #     return f"{int(val):{align}{chars}}"
-
-        if self.aggregation == "gop":
-            x_values = [i for i in range(len(chunks))]
-            fig.set_x_limits(min_=0, max_=len(chunks))
-            fig.x_label = "GOP"
-        else:
-            # x values are time-based
-            x_values = [i * self.chunk_size for i in range(len(chunks))]
-            fig.set_x_limits(min_=0, max_=self.duration)
-            fig.x_label = "Time (s)"
+        x_values = (
+            self._gop_start_times
+            if self.aggregation == "gop"
+            else [i * self.chunk_size for i in range(len(chunks))]
+        )
 
         fig.register_label_formatter(int, _round_decimals)
         fig.register_label_formatter(float, _round_decimals)
+        fig.set_x_limits(min_=0, max_=self.duration)
         fig.set_y_limits(min_=0)
+        fig.x_label = "Time (s)"
         fig.y_label = "Bitrate (kbit/s)"
 
         fig.plot(
