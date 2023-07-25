@@ -56,7 +56,7 @@ test_files = {
             "max_bitrate_factor": 0.625,
             "bitrate_per_chunk": [9258.5],
             "aggregation": "gop",
-            "chunk_size": 1.0,
+            "chunk_size": None,
             "duration": 0.1,
         },
     },
