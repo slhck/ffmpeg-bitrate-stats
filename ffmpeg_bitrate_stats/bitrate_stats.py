@@ -213,7 +213,10 @@ class BitrateStats:
 
         for packet_info in info:
             frame_type: Literal["I", "Non-I"] = (
-                "I" if packet_info["flags"] == "K_" else "Non-I"
+                # key frames are marked with a capital K (K_ or K__) in packet flags
+                "I"
+                if "K" in packet_info["flags"]
+                else "Non-I"
             )
 
             pts: float | Literal["NaN"] = (
