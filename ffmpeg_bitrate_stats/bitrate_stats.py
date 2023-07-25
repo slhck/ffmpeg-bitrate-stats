@@ -354,6 +354,10 @@ class BitrateStats:
         """
         if len(frame_list) < 2:
             return math.nan
+
+        # sort frames by PTS in case they are unordered
+        frame_list.sort(key=lambda x: x["pts"])
+
         duration = float(frame_list[-1]["pts"]) - float(frame_list[0]["pts"])
         size = sum(f["size"] for f in frame_list)
         bitrate = ((size * 8) / 1000) / duration
