@@ -1,6 +1,15 @@
 # Changelog
 
 
+## v0.4.3 (2023-07-25)
+
+* Fix bug with keyframe detection.
+
+  in some cases (when?), keyframes are not 'K_' but 'K__'
+
+* Add .vscode to gitignore.
+
+
 ## v0.4.2 (2023-07-25)
 
 * Fix frame order for bitrate calculation.
