@@ -1,6 +1,11 @@
 # Changelog
 
 
+## v1.0.1 (2023-07-25)
+
+* Fix formatting for GOP based plots.
+
+
 ## v1.0.0 (2023-07-25)
 
 * Allow plotting results.
