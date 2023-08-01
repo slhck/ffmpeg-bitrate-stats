@@ -15,15 +15,18 @@ logger = logging.getLogger("ffmpeg-bitrate-stats")
 
 
 def run_command(
-    cmd: List[str], dry_run: bool = False, verbose: bool = False
+    cmd: List[str], dry_run: bool = False
 ) -> tuple[str, str] | tuple[None, None]:
     """
     Run a command directly
     """
-    if dry_run or verbose:
+
+    # for verbose mode
+    logger.debug("[cmd] " + " ".join(cmd))
+
+    if dry_run:
         logger.info("[cmd] " + " ".join(cmd))
-        if dry_run:
-            return None, None
+        return None, None
 
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()
