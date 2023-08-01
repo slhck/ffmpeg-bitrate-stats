@@ -257,6 +257,10 @@ class BitrateStats:
                 }
             )
             idx += 1
+        
+        # fix for missing pts in first packet (occurs when reading streams)
+        if self.read_length and ret[0]["pts"] == "NaN":
+            ret[0]["pts"] = ret[1]["pts"] - ret[0]["duration"]
 
         # fix for missing durations, estimate it via PTS
         if default_duration == "NaN":
