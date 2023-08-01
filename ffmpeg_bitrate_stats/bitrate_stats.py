@@ -290,9 +290,7 @@ class BitrateStats:
         Returns:
             float: The duration in seconds.
         """
-        self.duration = round(
-            sum(f["duration"] for f in self.frames if f["duration"] != "NaN"), 2
-        )
+        self.duration = sum(f["duration"] for f in self.frames if f["duration"] != "NaN")
         return self.duration
 
     def _calculate_fps(self) -> float:
