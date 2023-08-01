@@ -85,6 +85,14 @@ def main() -> None:
     )
 
     parser.add_argument(
+        "-r",
+        "--read-length",
+        type=int,
+        default=None,
+        help="Length of time to sample stream (in seconds)",
+    )
+
+    parser.add_argument(
         "-of",
         "--output-format",
         type=str,
@@ -124,6 +132,7 @@ def main() -> None:
         stream_type=cli_args.stream_type,
         aggregation=cli_args.aggregation,
         chunk_size=cli_args.chunk_size,
+        read_length=cli_args.read_length,
         dry_run=cli_args.dry_run,
     )
     br.calculate_statistics()

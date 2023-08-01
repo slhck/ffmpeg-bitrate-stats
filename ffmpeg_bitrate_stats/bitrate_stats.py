@@ -121,6 +121,7 @@ class BitrateStats:
         stream_type: StreamType = "video",
         aggregation: Aggregation = "time",
         chunk_size: int = 1,
+        read_length: int = None,
         dry_run: bool = False,
     ):
         self.input_file = input_file
@@ -138,6 +139,10 @@ class BitrateStats:
         if chunk_size and chunk_size < 0:
             raise ValueError("Chunk size must be greater than 0")
         self.chunk_size = chunk_size
+
+        if read_length and read_length < 0:
+            raise ValueError("Read length must be greater than 0")
+        self.read_length = read_length
 
         self.dry_run = dry_run
 
@@ -191,6 +196,10 @@ class BitrateStats:
             "error",
             "-select_streams",
             self.stream_type[0] + ":0",
+            # "-analyzeduration",
+            # str(self.chunk_size*1000000),
+            "-read_intervals",
+            f"%+{self.read_length}" if self.read_length != None else "%",
             "-show_packets",
             "-show_entries",
             "packet=pts_time,dts_time,duration_time,size,flags",
