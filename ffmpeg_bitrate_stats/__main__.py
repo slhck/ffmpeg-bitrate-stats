@@ -87,16 +87,16 @@ def main() -> None:
     parser.add_argument(
         "-rs",
         "--read-start",
-        type=int,
+        type=str,
         default=None,
-        help="Time to wait before sampling video (in seconds)",
+        help="Time to wait before sampling video (in HH:MM:SS.msec or seconds)",
     )
     parser.add_argument(
-        "-re",
-        "--read-end",
-        type=int,
+        "-rd",
+        "--read-duration",
+        type=str,
         default=None,
-        help="Length of time to sample stream (in seconds)",
+        help="Duration for sampling stream (in HH:MM:SS.msec or seconds)",
     )
 
     parser.add_argument(
@@ -140,7 +140,7 @@ def main() -> None:
         aggregation=cli_args.aggregation,
         chunk_size=cli_args.chunk_size,
         read_start=cli_args.read_start,
-        read_end=cli_args.read_end,
+        read_duration=cli_args.read_duration,
         dry_run=cli_args.dry_run,
     )
     br.calculate_statistics()

@@ -47,11 +47,11 @@ See `ffmpeg-bitrate-stats -h`:
 
 ```
 usage: __main__.py [-h] [-n] [-v] [-s {video,audio}] [-a {time,gop}]
-                   [-c CHUNK_SIZE] [-of {json,csv}] [-p] [-pw PLOT_WIDTH]
-                   [-ph PLOT_HEIGHT]
+                   [-c CHUNK_SIZE] [-rs READ_START] [-rd READ_DURATION]
+                   [-of {json,csv}] [-p] [-pw PLOT_WIDTH] [-ph PLOT_HEIGHT]
                    input
 
-ffmpeg_bitrate_stats v0.4.3
+ffmpeg_bitrate_stats v1.0.2
 
 positional arguments:
   input                 input file
@@ -69,6 +69,12 @@ options:
   -c CHUNK_SIZE, --chunk-size CHUNK_SIZE
                         Custom aggregation window size in seconds (default:
                         1.0)
+  -rs READ_START, --read-start READ_START
+                        Time to wait before sampling video (in HH:MM:SS.msec
+                        or seconds) (default: None)
+  -rd READ_DURATION, --read-duration READ_DURATION
+                        Duration for sampling stream (in HH:MM:SS.msec or
+                        seconds) (default: None)
   -of {json,csv}, --output-format {json,csv}
                         output in which format (default: json)
   -p, --plot            Plot the bitrate over time (to STDERR) (default:

@@ -115,6 +115,8 @@ class BitrateStats:
         stream_type (str, optional): Stream type (audio/video). Defaults to "video".
         aggregation (str, optional): Aggregation type (time/gop). Defaults to "time".
         chunk_size (int, optional): Chunk size. Defaults to 1.
+        read_start (str, optional): Start time for reading in HH:MM:SS.msec or seconds. Defaults to None.
+        read_duration (str, optional): Duration for reading in HH:MM:SS.msec or seconds. Defaults to None.
         dry_run (bool, optional): Dry run. Defaults to False.
     """
 
@@ -124,8 +126,8 @@ class BitrateStats:
         stream_type: StreamType = "video",
         aggregation: Aggregation = "time",
         chunk_size: int = 1,
-        read_start: int = None,
-        read_end: int = None,
+        read_start: Optional[str] = None,
+        read_duration: Optional[str] = None,
         dry_run: bool = False,
     ):
         self.input_file = input_file
@@ -144,13 +146,9 @@ class BitrateStats:
             raise ValueError("Chunk size must be greater than 0")
         self.chunk_size = chunk_size
 
-        if read_start and read_start < 0:
-            raise ValueError("Read start time must be greater or equal than 0")
-        if read_end and read_end < 0:
-            raise ValueError("Read end time must be greater than 0")
         self.read_length = "{}%{}".format(
             f"+{read_start}" if read_start else "",
-            f"+{read_end}" if read_end else ""
+            f"+{read_duration}" if read_duration else "",
         )
 
         self.dry_run = dry_run
@@ -261,9 +259,13 @@ class BitrateStats:
                 }
             )
             idx += 1
-        
+
         # fix for missing pts in first packet (occurs when reading streams)
-        if self.read_length and ret[0]["pts"] == "NaN":
+        if (
+            ret[0]["pts"] == "NaN"
+            and isinstance(ret[1]["pts"], float)
+            and isinstance(ret[0]["duration"], float)
+        ):
             ret[0]["pts"] = ret[1]["pts"] - ret[0]["duration"]
 
         # fix for missing durations, estimate it via PTS
@@ -301,7 +303,9 @@ class BitrateStats:
         Returns:
             float: The duration in seconds.
         """
-        self.duration = sum(f["duration"] for f in self.frames if f["duration"] != "NaN")
+        self.duration = sum(
+            f["duration"] for f in self.frames if f["duration"] != "NaN"
+        )
         return self.duration
 
     def _calculate_fps(self) -> float:
