@@ -260,17 +260,22 @@ class BitrateStats:
             )
             idx += 1
 
-        # fix for missing pts in first packet (occurs when reading streams)
-        if (
-            ret[0]["pts"] == "NaN"
-            and isinstance(ret[1]["pts"], float)
-            and isinstance(ret[0]["duration"], float)
-        ):
-            ret[0]["pts"] = ret[1]["pts"] - ret[0]["duration"]
-
         # fix for missing durations, estimate it via PTS
         if default_duration == "NaN":
             ret = self._fix_durations(ret)
+
+        # fix missing data in first packet (occurs occassionally when reading streams)
+        if (
+            ret[0]["duration"] == "NaN"
+            and isinstance(ret[1]["duration"], float)
+        ):
+            ret[0]["duration"] = ret[1]["duration"]
+
+        if (
+            ret[0]["pts"] == "NaN"
+            and isinstance(ret[1]["pts"], float)
+        ):
+            ret[0]["pts"] = ret[1]["pts"] - ret[0]["duration"]
 
         self.frames = ret
         return ret
