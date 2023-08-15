@@ -274,6 +274,7 @@ class BitrateStats:
         if (
             ret[0]["pts"] == "NaN"
             and isinstance(ret[1]["pts"], float)
+            and isinstance(ret[0]["duration"], float)
         ):
             ret[0]["pts"] = ret[1]["pts"] - ret[0]["duration"]
 
