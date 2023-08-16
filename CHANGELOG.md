@@ -1,6 +1,41 @@
 # Changelog
 
 
+## v1.1.0 (2023-08-16)
+
+* Document inaccurate read-duration.
+
+* --read-length CLI option + some code suggestions (#11)
+
+  * Added --read-length CLI option
+
+  * Removed additional round for duration
+  - duration is rounded at calculation & when creating BitrateStatsSummary
+
+  * Edited logging in run_command function
+  - removed verbose input parameter
+  - added debug level log
+
+  * fix first packet's pts bug with --read-length
+  - calculates pts from next packet if value is missing
+
+  * minor code touchups
+
+  * Replaced read-length with read-start & read-end
+
+  * fix read-duration type and add to README
+
+  * fix first packet's duration bug
+  - occurs with --read-duration)
+
+  * edited for test case
+  - added check for 1st packet's duration type
+
+  ---------
+
+* Fix tests.
+
+
 ## v1.0.2 (2023-07-25)
 
 * Do not output chunk size when aggregation is GOP-based.
