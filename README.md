@@ -74,7 +74,9 @@ options:
                         or seconds) (default: None)
   -rd READ_DURATION, --read-duration READ_DURATION
                         Duration for sampling stream (in HH:MM:SS.msec or
-                        seconds) (default: None)
+                        seconds). Note that seeking is not accurate, see
+                        ffprobe documentation on '-read_intervals'. (default:
+                        None)
   -of {json,csv}, --output-format {json,csv}
                         output in which format (default: json)
   -p, --plot            Plot the bitrate over time (to STDERR) (default:

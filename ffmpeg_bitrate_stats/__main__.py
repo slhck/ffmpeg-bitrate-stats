@@ -96,7 +96,7 @@ def main() -> None:
         "--read-duration",
         type=str,
         default=None,
-        help="Duration for sampling stream (in HH:MM:SS.msec or seconds)",
+        help="Duration for sampling stream (in HH:MM:SS.msec or seconds). Note that seeking is not accurate, see ffprobe documentation on '-read_intervals'.",
     )
 
     parser.add_argument(
