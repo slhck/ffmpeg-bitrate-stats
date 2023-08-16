@@ -15,15 +15,18 @@ logger = logging.getLogger("ffmpeg-bitrate-stats")
 
 
 def run_command(
-    cmd: List[str], dry_run: bool = False, verbose: bool = False
+    cmd: List[str], dry_run: bool = False
 ) -> tuple[str, str] | tuple[None, None]:
     """
     Run a command directly
     """
-    if dry_run or verbose:
+
+    # for verbose mode
+    logger.debug("[cmd] " + " ".join(cmd))
+
+    if dry_run:
         logger.info("[cmd] " + " ".join(cmd))
-        if dry_run:
-            return None, None
+        return None, None
 
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()
@@ -112,6 +115,8 @@ class BitrateStats:
         stream_type (str, optional): Stream type (audio/video). Defaults to "video".
         aggregation (str, optional): Aggregation type (time/gop). Defaults to "time".
         chunk_size (int, optional): Chunk size. Defaults to 1.
+        read_start (str, optional): Start time for reading in HH:MM:SS.msec or seconds. Defaults to None.
+        read_duration (str, optional): Duration for reading in HH:MM:SS.msec or seconds. Defaults to None.
         dry_run (bool, optional): Dry run. Defaults to False.
     """
 
@@ -121,6 +126,8 @@ class BitrateStats:
         stream_type: StreamType = "video",
         aggregation: Aggregation = "time",
         chunk_size: int = 1,
+        read_start: Optional[str] = None,
+        read_duration: Optional[str] = None,
         dry_run: bool = False,
     ):
         self.input_file = input_file
@@ -138,6 +145,11 @@ class BitrateStats:
         if chunk_size and chunk_size < 0:
             raise ValueError("Chunk size must be greater than 0")
         self.chunk_size = chunk_size
+
+        self.read_length = "{}%{}".format(
+            f"+{read_start}" if read_start else "",
+            f"+{read_duration}" if read_duration else "",
+        )
 
         self.dry_run = dry_run
 
@@ -191,6 +203,8 @@ class BitrateStats:
             "error",
             "-select_streams",
             self.stream_type[0] + ":0",
+            "-read_intervals",
+            self.read_length,
             "-show_packets",
             "-show_entries",
             "packet=pts_time,dts_time,duration_time,size,flags",
@@ -250,6 +264,20 @@ class BitrateStats:
         if default_duration == "NaN":
             ret = self._fix_durations(ret)
 
+        # fix missing data in first packet (occurs occassionally when reading streams)
+        if (
+            ret[0]["duration"] == "NaN"
+            and isinstance(ret[1]["duration"], float)
+        ):
+            ret[0]["duration"] = ret[1]["duration"]
+
+        if (
+            ret[0]["pts"] == "NaN"
+            and isinstance(ret[1]["pts"], float)
+            and isinstance(ret[0]["duration"], float)
+        ):
+            ret[0]["pts"] = ret[1]["pts"] - ret[0]["duration"]
+
         self.frames = ret
         return ret
 
@@ -281,8 +309,8 @@ class BitrateStats:
         Returns:
             float: The duration in seconds.
         """
-        self.duration = round(
-            sum(f["duration"] for f in self.frames if f["duration"] != "NaN"), 2
+        self.duration = sum(
+            f["duration"] for f in self.frames if f["duration"] != "NaN"
         )
         return self.duration
 
