@@ -219,6 +219,11 @@ class BitrateStats:
             sys.exit(0)
 
         info = json.loads(stdout)["packets"]
+        # abort if nothing returned
+        if not info:
+            raise RuntimeError(
+                "No frames returned, please check your input file and the ffprobe output. Run with -v to see the ffprobe command."
+            )
 
         ret: list[FrameEntry] = []
         idx = 1
@@ -230,9 +235,7 @@ class BitrateStats:
         for packet_info in info:
             frame_type: Literal["I", "Non-I"] = (
                 # key frames are marked with a capital K (K_ or K__) in packet flags
-                "I"
-                if "K" in packet_info["flags"]
-                else "Non-I"
+                "I" if "K" in packet_info["flags"] else "Non-I"
             )
 
             pts: float | Literal["NaN"] = (
@@ -265,10 +268,7 @@ class BitrateStats:
             ret = self._fix_durations(ret)
 
         # fix missing data in first packet (occurs occassionally when reading streams)
-        if (
-            ret[0]["duration"] == "NaN"
-            and isinstance(ret[1]["duration"], float)
-        ):
+        if ret[0]["duration"] == "NaN" and isinstance(ret[1]["duration"], float):
             ret[0]["duration"] = ret[1]["duration"]
 
         if (
