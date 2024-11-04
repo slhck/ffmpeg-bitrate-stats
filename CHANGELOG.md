@@ -1,6 +1,21 @@
 # Changelog
 
 
+## v1.1.1 (2024-11-04)
+
+* Abort on empty ffprobe output, addresses #13.
+
+* Update readme (contributors)
+
+* Docs: add GabrielChanzy as a contributor for code (#12)
+
+  * docs: update README.md [skip ci]
+
+  * docs: create .all-contributorsrc [skip ci]
+
+  ---------
+
+
 ## v1.1.0 (2023-08-16)
 
 * Document inaccurate read-duration.
