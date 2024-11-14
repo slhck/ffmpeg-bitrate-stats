@@ -1,6 +1,11 @@
 # Changelog
 
 
+## v1.1.2 (2024-11-14)
+
+* Fix: only add read_intervals option if needed.
+
+
 ## v1.1.1 (2024-11-04)
 
 * Abort on empty ffprobe output, addresses #13.
