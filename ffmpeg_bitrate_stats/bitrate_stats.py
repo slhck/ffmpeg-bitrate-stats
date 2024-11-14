@@ -146,10 +146,12 @@ class BitrateStats:
             raise ValueError("Chunk size must be greater than 0")
         self.chunk_size = chunk_size
 
-        self.read_length = "{}%{}".format(
-            f"+{read_start}" if read_start else "",
-            f"+{read_duration}" if read_duration else "",
-        )
+        self.read_length: Optional[str] = None
+        if read_start or read_duration:
+            self.read_length = "{}%{}".format(
+                f"+{read_start}" if read_start else "",
+                f"+{read_duration}" if read_duration else "",
+            )
 
         self.dry_run = dry_run
 
@@ -197,23 +199,29 @@ class BitrateStats:
         """
         logger.debug(f"Calculating frame size from {self.input_file}")
 
-        cmd = [
+        base_cmd = [
             "ffprobe",
             "-loglevel",
             "error",
             "-select_streams",
             self.stream_type[0] + ":0",
-            "-read_intervals",
-            self.read_length,
-            "-show_packets",
-            "-show_entries",
-            "packet=pts_time,dts_time,duration_time,size,flags",
-            "-of",
-            "json",
-            self.input_file,
         ]
 
-        stdout, _ = run_command(cmd, self.dry_run)
+        if self.read_length:
+            base_cmd.extend(["-read_intervals", self.read_length])
+
+        base_cmd.extend(
+            [
+                "-show_packets",
+                "-show_entries",
+                "packet=pts_time,dts_time,duration_time,size,flags",
+                "-of",
+                "json",
+                self.input_file,
+            ]
+        )
+
+        stdout, _ = run_command(base_cmd, self.dry_run)
         if self.dry_run or stdout is None:
             logger.error("Aborting prematurely, dry-run specified or stdout was empty")
             sys.exit(0)
