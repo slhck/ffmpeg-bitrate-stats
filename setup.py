@@ -33,7 +33,7 @@ setup(
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "Topic :: Multimedia :: Video",
-        "License :: OSI Approved :: MIT License",
+        "MIT",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
