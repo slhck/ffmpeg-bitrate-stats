@@ -40,7 +40,7 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
     ],
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     packages=["ffmpeg_bitrate_stats"],
     install_requires=["numpy", "pandas", "plotille"],
     include_package_data=True,
