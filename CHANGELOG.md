@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v1.1.3 (2025-09-01)
+
+* Bump version to 1.1.3.
+
+* Migrate to uv and modern package structure.
+
+* Set python_requires to >=3.9.
+
+* Changed license specifier.
+
+* Removed wheel settings from setup.cfg.
+
+
 ## v1.1.2 (2024-11-14)
 
 * Fix: only add read_intervals option if needed.
