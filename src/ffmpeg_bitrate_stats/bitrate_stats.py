@@ -10,15 +10,25 @@ from typing import Any, List, Literal, Optional, TypedDict, cast
 import numpy as np
 import pandas as pd
 import plotille
+from tqdm import tqdm
 
 logger = logging.getLogger("ffmpeg-bitrate-stats")
 
 
 def run_command(
-    cmd: List[str], dry_run: bool = False
+    cmd: List[str],
+    dry_run: bool = False,
+    show_progress: bool = False,
+    total_frames: Optional[int] = None,
 ) -> tuple[str, str] | tuple[None, None]:
     """
     Run a command directly
+
+    Args:
+        cmd: The command to run
+        dry_run: If True, just print the command without running
+        show_progress: If True, show a progress bar
+        total_frames: Total number of frames for progress estimation
     """
 
     # for verbose mode
@@ -29,13 +39,48 @@ def run_command(
         return None, None
 
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = process.communicate()
+
+    if show_progress:
+        # Read stdout line by line and show progress
+        stdout_lines: List[str] = []
+        packet_count = 0
+
+        # Create progress bar - if we have frame count use it, otherwise use indeterminate
+        pbar = tqdm(
+            total=total_frames,
+            desc="Analyzing",
+            unit=" packets",
+            file=sys.stderr,
+            leave=False,
+        )
+
+        assert process.stdout is not None
+        for line in process.stdout:
+            decoded_line = line.decode("utf-8")
+            stdout_lines.append(decoded_line)
+            # Count packet entries in JSON output
+            if '"pts_time"' in decoded_line or '"size"' in decoded_line:
+                packet_count += 1
+                if total_frames:
+                    pbar.update(1)
+                else:
+                    pbar.update(1)
+                    pbar.total = packet_count
+
+        pbar.close()
+        stdout = "".join(stdout_lines)
+        stderr = process.stderr.read().decode("utf-8") if process.stderr else ""
+        process.wait()
+    else:
+        stdout_bytes, stderr_bytes = process.communicate()
+        stdout = stdout_bytes.decode("utf-8")
+        stderr = stderr_bytes.decode("utf-8")
 
     if process.returncode == 0:
-        return stdout.decode("utf-8"), stderr.decode("utf-8")
+        return stdout, stderr
     else:
         logger.error("error running command: {}".format(" ".join(cmd)))
-        logger.error(stderr.decode("utf-8"))
+        logger.error(stderr)
         sys.exit(1)
 
 
@@ -118,6 +163,7 @@ class BitrateStats:
         read_start (str, optional): Start time for reading in HH:MM:SS.msec or seconds. Defaults to None.
         read_duration (str, optional): Duration for reading in HH:MM:SS.msec or seconds. Defaults to None.
         dry_run (bool, optional): Dry run. Defaults to False.
+        show_progress (bool, optional): Show progress bar. Defaults to True.
     """
 
     def __init__(
@@ -129,6 +175,7 @@ class BitrateStats:
         read_start: Optional[str] = None,
         read_duration: Optional[str] = None,
         dry_run: bool = False,
+        show_progress: bool = True,
     ):
         self.input_file = input_file
 
@@ -154,6 +201,7 @@ class BitrateStats:
             )
 
         self.dry_run = dry_run
+        self.show_progress = show_progress
 
         self.duration: float = 0
         self.fps: float = 0
@@ -189,6 +237,34 @@ class BitrateStats:
 
         return self.bitrate_stats
 
+    def _get_frame_count(self) -> Optional[int]:
+        """
+        Get the total frame/packet count for progress estimation.
+
+        Returns:
+            int or None: The frame count, or None if unavailable.
+        """
+        cmd = [
+            "ffprobe",
+            "-loglevel",
+            "error",
+            "-select_streams",
+            self.stream_type[0] + ":0",
+            "-show_entries",
+            "stream=nb_frames",
+            "-of",
+            "default=noprint_wrappers=1:nokey=1",
+            self.input_file,
+        ]
+
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+            if result.returncode == 0 and result.stdout.strip():
+                return int(result.stdout.strip())
+        except (subprocess.TimeoutExpired, ValueError):
+            pass
+        return None
+
     def _calculate_frame_sizes(self) -> list[FrameEntry]:
         """
         Get the frame sizes via ffprobe using the -show_packets option.
@@ -221,7 +297,17 @@ class BitrateStats:
             ]
         )
 
-        stdout, _ = run_command(base_cmd, self.dry_run)
+        # Get frame count for progress bar (only if showing progress)
+        frame_count = None
+        if self.show_progress:
+            frame_count = self._get_frame_count()
+
+        stdout, _ = run_command(
+            base_cmd,
+            self.dry_run,
+            show_progress=self.show_progress,
+            total_frames=frame_count,
+        )
         if self.dry_run or stdout is None:
             logger.error("Aborting prematurely, dry-run specified or stdout was empty")
             sys.exit(0)

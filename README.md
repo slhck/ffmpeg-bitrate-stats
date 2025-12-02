@@ -57,12 +57,12 @@ Output is to STDOUT so you can redirect that to a file or another script.
 See `ffmpeg-bitrate-stats -h`:
 
 ```
-usage: __main__.py [-h] [-n] [-v] [-s {video,audio}] [-a {time,gop}]
+usage: __main__.py [-h] [-n] [-v] [-q] [-s {video,audio}] [-a {time,gop}]
                    [-c CHUNK_SIZE] [-rs READ_START] [-rd READ_DURATION]
                    [-of {json,csv}] [-p] [-pw PLOT_WIDTH] [-ph PLOT_HEIGHT]
                    input
 
-ffmpeg_bitrate_stats v1.0.2
+ffmpeg_bitrate_stats v1.1.4
 
 positional arguments:
   input                 input file
@@ -72,31 +72,34 @@ options:
   -n, --dry-run         Do not run command, just show what would be done
                         (default: False)
   -v, --verbose         Show verbose output (default: False)
-  -s {video,audio}, --stream-type {video,audio}
+  -q, --quiet           Do not show progress bar (default: False)
+  -s, --stream-type {video,audio}
                         Stream type to analyze (default: video)
-  -a {time,gop}, --aggregation {time,gop}
+  -a, --aggregation {time,gop}
                         Window for aggregating statistics, either time-based
                         (per-second) or per GOP (default: time)
-  -c CHUNK_SIZE, --chunk-size CHUNK_SIZE
+  -c, --chunk-size CHUNK_SIZE
                         Custom aggregation window size in seconds (default:
                         1.0)
-  -rs READ_START, --read-start READ_START
+  -rs, --read-start READ_START
                         Time to wait before sampling video (in HH:MM:SS.msec
                         or seconds) (default: None)
-  -rd READ_DURATION, --read-duration READ_DURATION
+  -rd, --read-duration READ_DURATION
                         Duration for sampling stream (in HH:MM:SS.msec or
                         seconds). Note that seeking is not accurate, see
                         ffprobe documentation on '-read_intervals'. (default:
                         None)
-  -of {json,csv}, --output-format {json,csv}
+  -of, --output-format {json,csv}
                         output in which format (default: json)
   -p, --plot            Plot the bitrate over time (to STDERR) (default:
                         False)
-  -pw PLOT_WIDTH, --plot-width PLOT_WIDTH
+  -pw, --plot-width PLOT_WIDTH
                         Plot width (default: 70)
-  -ph PLOT_HEIGHT, --plot-height PLOT_HEIGHT
+  -ph, --plot-height PLOT_HEIGHT
                         Plot height (default: 18)
 ```
+
+By default, a progress bar is shown during analysis. Use `-q`/`--quiet` to disable it, or `-v`/`--verbose` to show debug output instead.
 
 ## Output
 

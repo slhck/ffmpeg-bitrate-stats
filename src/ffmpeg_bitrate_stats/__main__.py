@@ -61,6 +61,13 @@ def main() -> None:
     )
 
     parser.add_argument(
+        "-q",
+        "--quiet",
+        action="store_true",
+        help="Do not show progress bar",
+    )
+
+    parser.add_argument(
         "-s",
         "--stream-type",
         default="video",
@@ -134,6 +141,9 @@ def main() -> None:
 
     setup_logger(logging.DEBUG if cli_args.verbose else logging.INFO)
 
+    # Show progress by default, but not when quiet or verbose mode is enabled
+    show_progress = not cli_args.quiet and not cli_args.verbose
+
     br = BitrateStats(
         cli_args.input,
         stream_type=cli_args.stream_type,
@@ -142,8 +152,10 @@ def main() -> None:
         read_start=cli_args.read_start,
         read_duration=cli_args.read_duration,
         dry_run=cli_args.dry_run,
+        show_progress=show_progress,
     )
     br.calculate_statistics()
+
     br.print_statistics(cli_args.output_format)
 
     if cli_args.plot:

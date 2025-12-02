@@ -29,6 +29,7 @@ dependencies = [
     "numpy",
     "pandas",
     "plotille",
+    "tqdm",
 ]
 
 [project.urls]
