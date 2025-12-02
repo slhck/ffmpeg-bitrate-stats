@@ -1,3 +1,13 @@
+## [1.2.0] - 2025-12-02
+
+### 🚀 Features
+
+- Add progress
+
+### ⚙️ Miscellaneous Tasks
+
+- Remove gitchangelog files
+- Bump version to 1.2.0
 ## [1.1.4] - 2025-10-17
 
 ### ⚙️ Miscellaneous Tasks
