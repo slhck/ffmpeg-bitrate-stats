@@ -1,3 +1,18 @@
+## [1.3.0] - 2026-01-13
+
+### 🚀 Features
+
+- Add ffprobe path
+
+### ⚙️ Miscellaneous Tasks
+
+- Update support to python 3.15
+- Test only Python 3.9 and 3.15
+- Bump version to 1.3.0
+
+### ◀️ Revert
+
+- Use Python 3.14 instead of 3.15
 ## [1.2.0] - 2025-12-02
 
 ### 🚀 Features
