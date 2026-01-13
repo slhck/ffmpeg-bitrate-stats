@@ -203,7 +203,8 @@ class BitrateStats:
             )
 
         self.dry_run = dry_run
-        self.show_progress = show_progress
+        # Disable progress bar in dry-run mode to avoid running ffprobe
+        self.show_progress = show_progress if not dry_run else False
         self.ffprobe_path = ffprobe_path
 
         self.duration: float = 0

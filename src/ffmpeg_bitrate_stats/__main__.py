@@ -148,8 +148,8 @@ def main() -> None:
 
     setup_logger(logging.DEBUG if cli_args.verbose else logging.INFO)
 
-    # Show progress by default, but not when quiet or verbose mode is enabled
-    show_progress = not cli_args.quiet and not cli_args.verbose
+    # Show progress by default, but not when quiet, verbose, or dry-run mode is enabled
+    show_progress = not cli_args.quiet and not cli_args.verbose and not cli_args.dry_run
 
     br = BitrateStats(
         cli_args.input,
