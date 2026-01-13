@@ -164,6 +164,7 @@ class BitrateStats:
         read_duration (str, optional): Duration for reading in HH:MM:SS.msec or seconds. Defaults to None.
         dry_run (bool, optional): Dry run. Defaults to False.
         show_progress (bool, optional): Show progress bar. Defaults to True.
+        ffprobe_path (str, optional): Path to ffprobe executable. Defaults to "ffprobe".
     """
 
     def __init__(
@@ -176,6 +177,7 @@ class BitrateStats:
         read_duration: Optional[str] = None,
         dry_run: bool = False,
         show_progress: bool = True,
+        ffprobe_path: str = "ffprobe",
     ):
         self.input_file = input_file
 
@@ -202,6 +204,7 @@ class BitrateStats:
 
         self.dry_run = dry_run
         self.show_progress = show_progress
+        self.ffprobe_path = ffprobe_path
 
         self.duration: float = 0
         self.fps: float = 0
@@ -245,7 +248,7 @@ class BitrateStats:
             int or None: The frame count, or None if unavailable.
         """
         cmd = [
-            "ffprobe",
+            self.ffprobe_path,
             "-loglevel",
             "error",
             "-select_streams",
@@ -276,7 +279,7 @@ class BitrateStats:
         logger.debug(f"Calculating frame size from {self.input_file}")
 
         base_cmd = [
-            "ffprobe",
+            self.ffprobe_path,
             "-loglevel",
             "error",
             "-select_streams",

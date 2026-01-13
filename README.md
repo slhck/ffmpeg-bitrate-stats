@@ -60,6 +60,7 @@ See `ffmpeg-bitrate-stats -h`:
 usage: __main__.py [-h] [-n] [-v] [-q] [-s {video,audio}] [-a {time,gop}]
                    [-c CHUNK_SIZE] [-rs READ_START] [-rd READ_DURATION]
                    [-of {json,csv}] [-p] [-pw PLOT_WIDTH] [-ph PLOT_HEIGHT]
+                   [--ffprobe-path FFPROBE_PATH]
                    input
 
 ffmpeg_bitrate_stats v1.1.4
@@ -97,6 +98,8 @@ options:
                         Plot width (default: 70)
   -ph, --plot-height PLOT_HEIGHT
                         Plot height (default: 18)
+  --ffprobe-path FFPROBE_PATH
+                        Path to ffprobe executable (default: ffprobe)
 ```
 
 By default, a progress bar is shown during analysis. Use `-q`/`--quiet` to disable it, or `-v`/`--verbose` to show debug output instead.

@@ -137,6 +137,13 @@ def main() -> None:
         help="Plot height",
     )
 
+    parser.add_argument(
+        "--ffprobe-path",
+        type=str,
+        default="ffprobe",
+        help="Path to ffprobe executable",
+    )
+
     cli_args = parser.parse_args()
 
     setup_logger(logging.DEBUG if cli_args.verbose else logging.INFO)
@@ -153,6 +160,7 @@ def main() -> None:
         read_duration=cli_args.read_duration,
         dry_run=cli_args.dry_run,
         show_progress=show_progress,
+        ffprobe_path=cli_args.ffprobe_path,
     )
     br.calculate_statistics()
 
