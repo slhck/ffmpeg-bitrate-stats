@@ -1,3 +1,12 @@
+## [1.3.1] - 2026-01-13
+
+### 🐛 Bug Fixes
+
+- Enable dry run if ffprobe_path does not exist, fixes #15
+
+### ⚙️ Miscellaneous Tasks
+
+- Bump version to 1.3.1
 ## [1.3.0] - 2026-01-13
 
 ### 🚀 Features
