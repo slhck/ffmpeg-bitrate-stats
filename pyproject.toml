@@ -43,13 +43,8 @@ ffmpeg-bitrate-stats = "ffmpeg_bitrate_stats.__main__:main"
 dev = [
     "pytest >=8.1.1,<9",
     "ruff>=0.12.11",
-    "mypy",
+    "ty>=0.0.1a7",
     "pdoc>=15.0.4",
 ]
 
-[tool.mypy]
-python_version = "3.13"
-ignore_missing_imports = true
-exclude = ["build"]
-namespace_packages = false
 

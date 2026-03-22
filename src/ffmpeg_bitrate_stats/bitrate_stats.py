@@ -586,7 +586,7 @@ class BitrateStats:
         cols = df.columns.tolist()
         cols.insert(0, cols.pop(cols.index("input_file")))
         df = df.reindex(columns=cols)
-        return cast(str, df.to_csv(index=False))
+        return df.to_csv(index=False)
 
     def get_json(self) -> str:
         """
