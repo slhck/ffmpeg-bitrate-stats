@@ -95,9 +95,11 @@ options:
   -p, --plot            Plot the bitrate over time (to STDERR) (default:
                         False)
   -pw, --plot-width PLOT_WIDTH
-                        Plot width (default: 70)
+                        Plot width in characters (auto-detected to fit the
+                        terminal if not set) (default: None)
   -ph, --plot-height PLOT_HEIGHT
-                        Plot height (default: 18)
+                        Plot height in characters (auto-detected to fit the
+                        terminal if not set) (default: None)
   --ffprobe-path FFPROBE_PATH
                         Path to ffprobe executable (default: ffprobe)
 ```

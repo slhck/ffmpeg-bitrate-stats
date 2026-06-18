@@ -1,12 +1,16 @@
 #!/usr/bin/env pytest
 
+import contextlib
+import io
 import json
 import os
 import sys
+from unittest import mock
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from ffmpeg_bitrate_stats import run_command  # noqa: E402
+from ffmpeg_bitrate_stats import BitrateStats, run_command  # noqa: E402
+from ffmpeg_bitrate_stats import bitrate_stats as bitrate_stats_module  # noqa: E402
 
 test_files = {
     "test.mp4": {
@@ -93,3 +97,26 @@ class TestBitrates:
             del output["input_file"]
 
             assert output == expected_output["results"]
+
+    def test_plot_fits_terminal(self) -> None:
+        """
+        The auto-detected plot must fit within the terminal without any line
+        wrapping onto the next one (regression test for #17).
+        """
+        test_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "test.mp4"))
+        br = BitrateStats(test_file, show_progress=False)
+        br.calculate_statistics()
+
+        for term_width, term_height in [(80, 24), (120, 40), (200, 50)]:
+            with mock.patch.object(
+                bitrate_stats_module,
+                "get_terminal_size",
+                return_value=(term_width, term_height),
+            ):
+                buf = io.StringIO()
+                with contextlib.redirect_stderr(buf):
+                    br.plot()  # auto-detect from the (mocked) terminal size
+
+            lines = buf.getvalue().rstrip("\n").split("\n")
+            assert max(len(line) for line in lines) <= term_width
+            assert len(lines) <= term_height

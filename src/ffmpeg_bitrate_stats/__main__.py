@@ -9,23 +9,13 @@
 
 import argparse
 import logging
-import os
 import sys
-from typing import Tuple
 
 from .__init__ import __version__ as version
 from .bitrate_stats import BitrateStats
 from .log import CustomLogFormatter
 
 logger = logging.getLogger("ffmpeg-bitrate-stats")
-
-
-def get_terminal_size() -> Tuple[int, int]:
-    try:
-        term_size = os.get_terminal_size()
-        return (term_size.columns, term_size.lines)
-    except OSError:
-        return (80, 24)
 
 
 def setup_logger(level: int = logging.INFO) -> logging.Logger:
@@ -126,15 +116,15 @@ def main() -> None:
         "-pw",
         "--plot-width",
         type=int,
-        default=max(get_terminal_size()[0] - 10, 10),
-        help="Plot width",
+        default=None,
+        help="Plot width in characters (auto-detected to fit the terminal if not set)",
     )
     parser.add_argument(
         "-ph",
         "--plot-height",
         type=int,
-        default=max(get_terminal_size()[1] - 6, 10),
-        help="Plot height",
+        default=None,
+        help="Plot height in characters (auto-detected to fit the terminal if not set)",
     )
 
     parser.add_argument(

@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import math
+import os
 import subprocess
 import sys
 from typing import Any, List, Literal, Optional, TypedDict, cast
@@ -13,6 +14,26 @@ import plotille
 from tqdm import tqdm
 
 logger = logging.getLogger("ffmpeg-bitrate-stats")
+
+# plotille renders more around the actual canvas
+_PLOT_WIDTH_OVERHEAD = 19
+_PLOT_HEIGHT_OVERHEAD = 4
+_PLOT_MIN_WIDTH = 30
+_PLOT_MIN_HEIGHT = 10
+
+
+def get_terminal_size() -> tuple[int, int]:
+    """
+    Get the terminal size as (columns, lines).
+
+    Returns:
+        tuple: (columns, lines)
+    """
+    try:
+        size = os.get_terminal_size()
+        return size.columns, size.lines
+    except OSError:
+        return 80, 24
 
 
 def run_command(
@@ -603,15 +624,31 @@ class BitrateStats:
 
         return json.dumps(self.bitrate_stats, indent=4)
 
-    def plot(self, width: int = 80, height: int = 30) -> None:
+    def plot(self, width: int | None = None, height: int | None = None) -> None:
         """
         Plot the bitrate over time to STDERR.
+        By default the plot is sized to fit the current terminal
 
         Args:
-            width (int, optional): Width of the plot. Defaults to 80.
-            height (int, optional): Height of the plot. Defaults to 30.
+            width (int, optional): Width of the plot in characters. Defaults to
+                None, which auto-detects from the terminal width.
+            height (int, optional): Height of the plot in characters. Defaults
+                to None, which auto-detects from the terminal height.
         """
         chunks = self._collect_chunks()
+
+        x_label = "Time (s)"
+        y_label = "Bitrate (kbit/s)"
+
+        if width is None or height is None:
+            term_width, term_height = get_terminal_size()
+            if width is None:
+                width = max(
+                    term_width - (len(x_label) + _PLOT_WIDTH_OVERHEAD),
+                    _PLOT_MIN_WIDTH,
+                )
+            if height is None:
+                height = max(term_height - _PLOT_HEIGHT_OVERHEAD, _PLOT_MIN_HEIGHT)
 
         fig = plotille.Figure()
         fig.width = width
@@ -633,8 +670,8 @@ class BitrateStats:
         fig.register_label_formatter(float, _round_decimals)
         fig.set_x_limits(min_=0, max_=self.duration)
         fig.set_y_limits(min_=0)
-        fig.x_label = "Time (s)"
-        fig.y_label = "Bitrate (kbit/s)"
+        fig.x_label = x_label
+        fig.y_label = y_label
 
         fig.plot(
             x_values,
