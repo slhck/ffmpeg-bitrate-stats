@@ -1,3 +1,12 @@
+## [1.3.3] - 2026-06-18
+
+### 🐛 Bug Fixes
+
+- Better auto-detection for terminal width, fixes #17
+
+### ⚙️ Miscellaneous Tasks
+
+- Bump version to 1.3.3
 ## [1.3.2] - 2026-03-30
 
 ### ⚙️ Miscellaneous Tasks
