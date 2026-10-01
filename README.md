@@ -1,4 +1,9 @@
-# FFmpeg Bitrate Stats
+<h1 align="center">FFmpeg Bitrate Stats</h1>
+
+<p align="center">
+  <img src="icon.png" alt="FFmpeg Bitrate Stats logo" width="160" height="160">
+</p>
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
