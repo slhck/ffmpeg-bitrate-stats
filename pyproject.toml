@@ -41,7 +41,7 @@ ffmpeg-bitrate-stats = "ffmpeg_bitrate_stats.__main__:main"
 
 [dependency-groups]
 dev = [
-    "pytest >=8.1.1,<9",
+    "pytest>=9.0.3",
     "ruff>=0.12.11",
     "ty>=0.0.1a7",
     "pdoc>=15.0.4",
