@@ -1,3 +1,17 @@
+## [1.3.4] - 2026-10-11
+
+### 🐛 Bug Fixes
+
+- *(deps)* Update dependencies with known vulnerabilities
+
+### 📚 Documentation
+
+- *(readme)* Add centered project icon
+
+### ⚙️ Miscellaneous Tasks
+
+- Require Python 3.10 and support Python 3.15
+- Bump version to 1.3.4
 ## [1.3.3] - 2026-06-18
 
 ### 🐛 Bug Fixes
