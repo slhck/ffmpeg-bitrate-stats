@@ -660,11 +660,13 @@ class BitrateStats:
             align = "<" if left else ""
             return f"{val:{align}{chars}.{self.rounding_factor}f}"
 
-        x_values = (
-            self._gop_start_times
-            if self.aggregation == "gop"
-            else [i * self.chunk_size for i in range(len(chunks))]
-        )
+        x_values: list[float]
+        if self.aggregation == "gop":
+            if self._gop_start_times is None:
+                raise RuntimeError("GOP start times have not been computed")
+            x_values = self._gop_start_times
+        else:
+            x_values = [i * self.chunk_size for i in range(len(chunks))]
 
         fig.register_label_formatter(int, _round_decimals)
         fig.register_label_formatter(float, _round_decimals)
